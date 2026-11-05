@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SpaGrief - Донат</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #FE2C55; --primary-hover: #d62448; --bg-dark: #0f0f11; --bg-panel: #18181b; --text-main: #ffffff; --text-muted: #8b8b93; --border-color: #2a2a30; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); background-image: radial-gradient(circle at 50% 0%, rgba(254, 44, 85, 0.15) 0%, transparent 50%); background-repeat: no-repeat; min-height: 100vh; display: flex; flex-direction: column; }
+        header { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; border-bottom: 1px solid var(--border-color); background: rgba(15, 15, 17, 0.9); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .logo span { color: var(--primary); }
+        nav { display: flex; gap: 30px; }
+        nav a { color: var(--text-main); text-decoration: none; font-weight: 600; font-size: 16px; transition: color 0.2s; cursor: pointer; padding-bottom: 5px; }
+        nav a:hover, nav a.active { color: var(--primary); border-bottom: 2px solid var(--primary); }
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; flex: 1; width: 100%; }
+        .shop-layout { display: flex; gap: 30px; align-items: flex-start; }
+        .items-panel { flex: 1; background: var(--bg-panel); border-radius: 8px; border-top: 4px solid var(--primary); overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .panel-title { padding: 20px; font-size: 18px; font-weight: 700; border-bottom: 1px solid var(--border-color); text-align: center; }
+        .item-list { max-height: 600px; overflow-y: auto; }
+        .item-list::-webkit-scrollbar { width: 6px; }
+        .item-list::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+        .item { display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid var(--border-color); cursor: pointer; transition: background 0.2s; }
+        .item:hover { background: rgba(254, 44, 85, 0.05); }
+        .item.active { background: var(--primary); }
+        .item-left { display: flex; align-items: center; gap: 15px; font-weight: 600; }
+        .item-icon { width: 32px; height: 32px; display: flex; justify-content: center; align-items: center; font-size: 24px; }
+        .item-price { color: var(--primary); font-weight: 700; }
+        .item.active .item-price { color: #fff; }
+        .details-panel { flex: 1.2; background: var(--bg-panel); border-radius: 8px; border-top: 4px solid var(--primary); padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-height: 500px; display: flex; flex-direction: column; }
+        .duration-selector { display: flex; gap: 20px; margin-bottom: 30px; border-bottom: 1px solid var(--border-color); padding-bottom: 15px; }
+        .duration-btn { background: none; border: none; color: var(--text-muted); font-size: 16px; font-weight: 700; cursor: pointer; transition: color 0.2s; position: relative; }
+        .duration-btn:hover { color: var(--text-main); }
+        .duration-btn.active { color: var(--text-main); }
+        .duration-btn.active::after { content: ''; position: absolute; bottom: -16px; left: 0; width: 100%; height: 3px; background: var(--primary); }
+        .details-title { font-size: 18px; color: var(--primary); margin-bottom: 15px; font-weight: 700; }
+        .details-list { list-style: none; color: var(--text-muted); font-size: 14px; line-height: 1.8; margin-bottom: 30px; }
+        .details-list li span { color: var(--text-main); font-weight: 600; }
+        .buy-section { margin-top: auto; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .total-price { font-size: 16px; color: var(--text-muted); }
+        .total-price span { font-size: 28px; color: var(--text-main); font-weight: 800; margin-left: 10px; }
+        .buy-btn { background: transparent; color: var(--text-main); border: 2px solid var(--primary); padding: 12px 40px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.3s; }
+        .buy-btn:hover { background: var(--primary); }
+        #rules-section { display: none; }
+        .rule-category { background: var(--bg-panel); border-radius: 8px; border-top: 4px solid var(--primary); padding: 30px; margin-bottom: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .rule-category h2 { font-size: 20px; margin-bottom: 20px; color: var(--text-main); }
+        .rule-text { color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+        .rule-text span { color: var(--primary); font-weight: 700; margin-right: 5px; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: var(--bg-panel); border-radius: 8px; border-top: 4px solid var(--primary); padding: 30px; width: 100%; max-width: 400px; position: relative; }
+        .modal-close { position: absolute; top: 15px; right: 15px; cursor: pointer; font-size: 20px; color: var(--text-muted); }
+        .modal-close:hover { color: var(--primary); }
+        .modal-title { font-size: 20px; margin-bottom: 20px; font-weight: 700; }
+        .modal-input { width: 100%; background: var(--bg-dark); border: 1px solid var(--border-color); color: var(--text-main); padding: 15px; margin-bottom: 15px; font-size: 16px; border-radius: 4px; outline: none; }
+        .modal-input:focus { border-color: var(--primary); }
+        .modal-btn { width: 100%; background: var(--primary); color: var(--text-main); border: none; padding: 15px; font-size: 16px; font-weight: 700; cursor: pointer; transition: background 0.3s; border-radius: 4px; }
+        .modal-btn:hover { background: var(--primary-hover); }
+        .modal-btn:disabled { background: var(--text-muted); cursor: not-allowed; }
+        footer { background: var(--bg-panel); padding: 20px; text-align: center; color: var(--text-muted); font-size: 12px; border-top: 1px solid var(--border-color); margin-top: 40px; }
+        @media (max-width: 768px) { .shop-layout { flex-direction: column; } .items-panel, .details-panel { width: 100%; } header { flex-direction: column; gap: 15px; } nav { width: 100%; justify-content: space-around; } }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo" onclick="switchTab('shop')">Spa<span>Grief</span></div>
+        <nav>
+            <a id="nav-shop" class="active" onclick="switchTab('shop')">Магазин</a>
+            <a id="nav-rules" onclick="switchTab('rules')">Правила</a>
+            <a href="https://discord.gg/yourlink" target="_blank">Discord</a>
+        </nav>
+    </header>
+    <div class="container">
+        <!-- SHOP SECTION -->
+        <div id="shop-section" class="shop-layout">
+            <div class="items-panel">
+                <div class="panel-title">Выберите товар:</div>
+                <div class="item-list" id="item-list"></div>
+            </div>
+            <div class="details-panel">
+                <div class="duration-selector" id="duration-selector">
+                    <button class="duration-btn active" data-duration="30">30 дней</button>
+                    <button class="duration-btn" data-duration="90">90 дней</button>
+                    <button class="duration-btn" data-duration="forever">Навсегда</button>
+                </div>
+                <div id="details-content">
+                    <div class="details-title">Возможности привилегии:</div>
+                    <ul class="details-list" id="details-list"></ul>
+                </div>
+                <div class="buy-section">
+                    <div class="total-price">Стоимость: <span id="total-price">0</span> руб.</div>
+                    <button class="buy-btn" onclick="openPaymentModal()">ПРИОБРЕСТИ</button>
+                </div>
+            </div>
+        </div>
+        <!-- RULES SECTION -->
+        <div id="rules-section">
+            <!-- 1. Основные правила -->
+            <div class="rule-category">
+                <h2>1. Основные правила:</h2>
+                <div class="rule-text">
+                    <span>1.1</span> Незнание правил не освобождает вас от ответственности;<br>
+                    <span>1.2</span> Начав играть на наших серверах, Вы автоматически подтверждаете своё согласие с данным сводом правил;<br>
+                    <span>1.3</span> Администратор вправе наказать игрока по причине, не указанной в настоящих правилах;<br>
+                    <span>1.4</span> Администрация не несет ответственности за временную или постоянную невозможность игры на сервере конкретным лицом или группой лиц;<br>
+                    <span>1.5</span> Администрация не несет ответственности за потерю игровых ценностей в следствии нарушения работоспособности сервера или его плагинов;<br>
+                    <span>1.6</span> Администрация не гарантирует работоспособность сервера, а также сохранность информации на нем и продолжение работы над ним;<br>
+                    <span>1.7</span> Администрация сервера не гарантирует надёжную работу в предоставлении услуг и сервисов, а также не несёт ответственность за ущерб, который может быть причинён пользователям вследствие сбоев в линиях связи, ошибочного использования предоставляемых услуг, дефектов программного обеспечения или других действий, которые могут привести к возникновению нежелательных ситуаций;<br>
+                    <span>1.8</span> Игроки обязаны соблюдать все правила;<br>
+                    <span>1.9</span> Администрация ведет логи всех действий игроков на сервере и всех сообщений чата;<br>
+                    <span>1.10</span> Администрация имеет право корректировать данный свод правил без уведомления игрока;<br>
+                    <span>1.11</span> Оскорбление, провоцирование администрации запрещено.
+                </div>
+            </div>
+            <!-- 2. Правила чата -->
+            <div class="rule-category">
+                <h2>2. Правила чата:</h2>
+                <div class="rule-text">
+                    <span>2.1</span> Запрещен Капс/Спам/Флуд в любом из чатов;<br>
+                    <span>2.2</span> Запрещены унижения, оскорбления игроков;<br>
+                    <span>2.3</span> Запрещена нецензурная лексика (маты, скрытые маты);<br>
+                    <span>2.4</span> Запрещено рекламировать/упоминать посторонние ресурсы, которые не связаны с проектом или его ресурсами;<br>
+                    <span>2.5</span> Чатами для рекламы/покупки/продажи разрешено пользоваться только в их тематичных целях;<br>
+                    <span>2.6</span> Запрещено упоминать/оскорблять родных и близких игроков;<br>
+                    <span>2.7</span> Запрещается розжиг межнациональной розни, подстрекательство на конфликт этой темы, расизм;<br>
+                    <span>2.8</span> Запрещено как-либо обходить блокировку чата;<br>
+                    <span>2.9</span> Запрещено вызывать игроков на проверку читов;<br>
+                    <span>2.10</span> Запрещено отправлять свои контактные данные(дискорд, вк и т.д) в чатах (исключение: личные сообщения);<br>
+                    <span>2.11</span> Запрещено продавать ресурсы или услуги ВНЕ серверного чата, например через дискорд;<br>
+                    <span>2.12</span> Самопризнание в нарушении правил проекта является поводом для бана.
+                </div>
+            </div>
+            <!-- 3. Аккаунт -->
+            <div class="rule-category">
+                <h2>3. Аккаунт:</h2>
+                <div class="rule-text">
+                    <span>3.1</span> Ник не должен содержать:<br>
+                    <span>3.1.1</span> Мата, скрытого мата, унижений, оскорблений;<br>
+                    <span>3.1.2</span> Схожесть с названием других проектов/чит клиентов;<br>
+                    <span>3.1.3</span> Схожесть с Администраторами, Ютуберами проекта;<br>
+                    <span>3.1.4</span> Схожесть с никами пользователей из ЧС Проекта;<br>
+                    <span>3.2</span> Запрещается предоставлять свой аккаунт другим людям;<br>
+                    <span>3.3</span> Ответственность несет владелец аккаунта, независимо от того, кто совершал действия под данным аккаунтом;<br>
+                    <span>3.4</span> Запрещена продажа/передача аккаунтов, продажа привилегий;<br>
+                    <span>3.5</span> Донат невозможно перенести на другой аккаунт.
+                </div>
+            </div>
+            <!-- 4. Игровые правила -->
+            <div class="rule-category">
+                <h2>4. Игровые правила:</h2>
+                <div class="rule-text">
+                    <span>4.1</span> Запрещено мошенничество, обман администрации;<br>
+                    <span>4.2</span> Запрещено продавать/покупать у игроков игровые ценности за реальную валюту;<br>
+                    <span>4.3</span> Запрещено пользоваться всем, что упрощает процесс игры, а именно:<br>
+                    <span>4.3.1</span> Сторонними программами, читами, кликерами, автоматизациями (Кроме разрешенных пунктом 4.13);<br>
+                    <span>4.3.2</span> Модами, запрещенными пунктом 4.12;<br>
+                    <span>4.4</span> Запрещено как-либо помогать, укрывать нарушителя или способствовать в его неправомерных действиях;<br>
+                    <span>4.5</span> Запрещено играть на проекте, если Ваши аккаунты были неоднократно блокированы пунктом 4.3 и его подпунктам;<br>
+                    <span>4.6</span> Запрещено вызывание неполадок в работе сервера или попытки обрушить сервер, путем специально вызванных лагов или подобного;<br>
+                    <span>4.6.1</span> Запрещена постройка и запуск механизмов, приводящих к одновременной активации большого количества поршней. Для ферм на поршнях рекомендуется использовать наблюдатели, которые активируют малое количество поршней <br>
+                    <span>4.7</span> Запрещено выдавать себя за Администрацию, устанавливать ники похожие на Администрацию или их префиксы;<br>
+                    <span>4.8</span> Запрещено использование/скрытие багов/недоработок сервера;<br>
+                    <span>4.9</span> Запрещено играть/взаимодействовать и помогать на режиме с игроками в количестве больше, чем разрешено на режиме.<br>
+                    <span>4.10</span> Запрещено строительство половых органов, нацистских символик, лавакастов;<br>
+                    <span>4.11</span> Запрещено подстрекать третьих лиц на нарушение правил;<br>
+                    <span>4.12</span> Полный список запрещенных модов <a href="https://forum.funtime.su/modifications" style="color: var(--primary);">[смотрите здесь]</a><br>
+                    <span>4.13</span> Полный список разрешенных автоматизаций <a href="https://forum.funtime.su/allowed-automation" style="color: var(--primary);">[смотрите здесь]</a><br>
+                    <span>4.14</span> Запрещён намеренный таргетинг официальных медийних лиц проекта. Умышленная помеха съемки игрового контента/слив игровых никнеймов;<br><br>
+                    <span>Примечание:</span> За многочисленное и постоянное нарушение пунктов <span>4.3</span> и <span>4.4</span> настоящих правил мы вправе полностью обнулить все Ваши аккаунты
+                </div>
+            </div>
+            <!-- 5. Правила проверки ПО -->
+            <div class="rule-category">
+                <h2>5. Правила проверки ПО:</h2>
+                <div class="rule-text">
+                    <span>5.1</span> Вы обязаны выполнять требования Проверяющего<br>
+                    (<span>Важно!</span> Вы должны понимать, что проверка проводится исключительно в целях поиска читов, запрещённых модификаций, программ и другого запрещённого ПО, поэтому если Проверяющий просит Вас выполнить нелогичные для проверки действия, например: включить веб-камеру, “покукарекать”, дать ему ресурсы — отключайтесь от проверки и срочно сообщите об этом Администрации)<br>
+                    <span>5.2</span> Данный свод правил не окончателен и может изменяться в зависимости от требований Проверяющего;<br>
+                    <span>5.3</span> Следите за чатом во время проверки, если Вы не увидели/проигнорировали сообщение от Проверяющего, это не будет расцениваться поводом для разблокировки аккаунта<br>
+                    <span>5.4</span> В случае если у Вас возникли непредвиденные обстоятельства, необходимо обязательно сообщить об этом Проверяющему;<br>
+                    <span>5.5</span> Запрещается препятствовать проведению проверки: долго открывать папки, задавать неуместные вопросы, оскорблять/унижать Проверяющего, игнорировать его требования и так далее;<br>
+                    <span>5.6</span> Во время проверки запрещается удалять какие-либо файлы с Вашего ПК, в том числе очищать корзину;<br>
+                    <span>5.7</span> Во время проверки запрещается выходить из Minecraft, также не забывайте, “крашнул майн”, “был в афк” — не расцениваются как повод для разблокировки аккаунта;<br>
+                    <span>5.8</span> Запрещается снимать ход проверки, исключение: личное разрешение Проверяющего;<br>
+                    <span>5.9</span> Проверяющий имеет право попросить Вас установить программы для эффективного и быстрого проведения проверки.
+                </div>
+            </div>
+            <!-- 9. Платные услуги -->
+            <div class="rule-category">
+                <h2>9. Платные услуги:</h2>
+                <div class="rule-text">
+                    <span>9.1</span> Попытки махинаций оплатами, или ввод Администрации в заблуждение наказываются баном без возврата средств;<br>
+                    <span>9.2</span> Предоставьте чек оплаты, если хотите написать Администрации о пропаже, непоявлении доната после покупки. Без данного подтверждения администрация вправе отказать Вам в предоставлении купленной услуги;<br>
+                    <span>9.3</span> Администрация не обязана предоставлять доказательства нарушений донатера у которого сняли привилегию за нарушение выше указанных правил.
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        Сервер SpaGrief никак не относится к Mojang, AB.<br>
+        © 2024 SpaGrief. Все права защищены.
+    </footer>
+    <!-- PAYMENT MODAL -->
+    <div class="modal-overlay" id="payment-modal">
+        <div class="modal-content">
+            <div class="modal-close" onclick="closePaymentModal()">✕</div>
+            <div class="modal-title" id="modal-title">Покупка товара</div>
+            <input type="text" class="modal-input" id="input-nick" placeholder="Ваш никнейм в игре">
+            <input type="email" class="modal-input" id="input-email" placeholder="Ваша почта (для чека)">
+            <button class="modal-btn" id="pay-btn" onclick="processPayment()">Оплатить</button>
+        </div>
+    </div>
+    <script>
+        // --- КОНФИГУРАЦИЯ ---
+        // ВАЖНО: Замените ID товаров (edId) на реальные ID из вашей панели EasyDonate!
+        const items = [
+            { 
+                id: "baron", name: "Барон", icon: "👑", type: "rank",
+                prices: { "30": { price: 49, edId: 1000 }, "90": { price: 89, edId: 1001 }, "forever": { price: 139, edId: 1002 } },
+                desc: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон ⇒ Получить набор Барона", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 2", "Регионов: 3 блоков", "Слотов на Аукционе: 6", "Задержка телепорта: 7 сек"]
+            },
+            { 
+                id: "strazh", name: "Страж", icon: "🛡️", type: "rank",
+                prices: { "30": { price: 89, edId: 1003 }, "90": { price: 179, edId: 1004 }, "forever": { price: 279, edId: 1005 } },
+                desc: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж ⇒ Получить набор Стража", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 3", "Регионов: 5 блоков", "Слотов на Аукционе: 8", "Задержка телепорта: 6 сек"]
+            },
+            { 
+                id: "geroy", name: "Герой", icon: "🦸", type: "rank",
+                prices: { "30": { price: 139, edId: 1006 }, "90": { price: 279, edId: 1007 }, "forever": { price: 379, edId: 1008 } },
+                desc: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой ⇒ Получить набор Героя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 4", "Регионов: 7 блоков", "Слотов на Аукционе: 10", "Задержка телепорта: 5 сек"]
+            },
+            { 
+                id: "aspid", name: "Аспид", icon: "🐍", type: "rank",
+                prices: { "30": { price: 179, edId: 1009 }, "90": { price: 379, edId: 1010 }, "forever": { price: 579, edId: 1011 } },
+                desc: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид ⇒ Получить набор Аспида", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 5", "Регионов: 9 блоков", "Слотов на Аукционе: 12", "Задержка телепорта: 4 сек"]
+            },
+            { 
+                id: "skvid", name: "Сквик", icon: "🦑", type: "rank",
+                prices: { "30": { price: 279, edId: 1012 }, "90": { price: 579, edId: 1013 }, "forever": { price: 879, edId: 1014 } },
+                desc: ["Префикс в чате и табе: [Сквик] ВашНик", "/kit Сквик ⇒ Получить набор Сквика", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 6", "Регионов: 11 блоков", "Слотов на Аукционе: 14", "Задержка телепорта: 3 сек"]
+            },
+            { 
+                id: "glava", name: "Глава", icon: "🎩", type: "rank",
+                prices: { "30": { price: 379, edId: 1015 }, "90": { price: 779, edId: 1016 }, "forever": { price: 1179, edId: 1017 } },
+                desc: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава ⇒ Получить набор Главы", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 7", "Регионов: 13 блоков", "Слотов на Аукционе: 16", "Задержка телепорта: 2 сек"]
+            },
+            { 
+                id: "elita", name: "Элита", icon: "💎", type: "rank",
+                prices: { "30": { price: 579, edId: 1018 }, "90": { price: 1179, edId: 1019 }, "forever": { price: 1779, edId: 1020 } },
+                desc: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита ⇒ Получить набор Элиты", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 8", "Регионов: 15 блоков", "Слотов на Аукционе: 18", "Задержка телепорта: 1 сек"]
+            },
+            { 
+                id: "prints", name: "Принц", icon: "🤴", type: "rank",
+                prices: { "30": { price: 979, edId: 1021 }, "90": { price: 1979, edId: 1022 }, "forever": { price: 2979, edId: 1023 } },
+                desc: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц ⇒ Получить набор Принца", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 9", "Регионов: 17 блоков", "Слотов на Аукционе: 20", "Задержка телепорта: 0 сек"]
+            },
+            { 
+                id: "knyaz", name: "Князь", icon: "👑", type: "rank",
+                prices: { "30": { price: 1299, edId: 1024 }, "90": { price: 2599, edId: 1025 }, "forever": { price: 3899, edId: 1026 } },
+                desc: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь ⇒ Получить набор Князя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 10", "Регионов: 20 блоков", "Слотов на Аукционе: 25", "Задержка телепорта: 0 сек"]
+            },
+            { 
+                id: "gertsog", name: "Герцог", icon: "👑", type: "rank",
+                prices: { "30": { price: 2799, edId: 1027 }, "90": { price: 5599, edId: 1028 }, "forever": { price: 8399, edId: 1029 } },
+                desc: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог ⇒ Получить набор Герцога", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 15", "Регионов: 30 блоков", "Слотов на Аукционе: 40", "Задержка телепорта: 0 сек"]
+            },
+            { id: "tokens", name: "Токены", icon: "💎", type: "flat", prices: { "30": { price: 15, edId: 2000 } }, desc: ["Игровая валюта для магазина /shop", "Позволяет покупать ресурсы и предметы", "Не имеет срока действия"] },
+            { id: "ex_balance", name: "Биржа Баланс", icon: "⚖️", type: "flat", prices: { "30": { price: 15, edId: 2001 } }, desc: ["Пополнение баланса на бирже", "Используется для торговли с другими игроками"] },
+            { id: "key_common", name: "Обычный Ключ", icon: "🔑", type: "flat", prices: { "30": { price: 10, edId: 2002 } }, desc: ["Ключ для открытия кейсов", "Содержит базовые ресурсы"] },
+            { id: "key_coin", name: "Монетный Ключ", icon: "🪙", type: "flat", prices: { "30": { price: 10, edId: 2003 } }, desc: ["Ключ для открытия кейсов", "Содержит монеты сервера"] },
+            { id: "key_token", name: "Токен Ключ", icon: "🟢", type: "flat", prices: { "30": { price: 18, edId: 2004 } }, desc: ["Ключ для открытия кейсов", "Содержит токены"] },
+            { id: "key_tool", name: "Инструментальный Ключ", icon: "🛠️", type: "flat", prices: { "30": { price: 18, edId: 2005 } }, desc: ["Ключ для открытия кейсов", "Содержит инструменты"] },
+            { id: "key_weapon", name: "Оружейный Ключ", icon: "⚔️", type: "flat", prices: { "30": { price: 18, edId: 2006 } }, desc: ["Ключ для открытия кейсов", "Содержит оружие"] },
+            { id: "key_armor", name: "Броневой Ключ", icon: "🛡️", type: "flat", prices: { "30": { price: 18, edId: 2007 } }, desc: ["Ключ для открытия кейсов", "Содержит броню"] },
+            { id: "key_donate", name: "Донат Ключ", icon: "🎁", type: "flat", prices: { "30": { price: 139, edId: 2008 } }, desc: ["Редкий ключ для открытия кейсов", "Содержит уникальные предметы и привилегии"] },
+            { id: "unmute", name: "Размут", icon: "🔊", type: "flat", prices: { "30": { price: 49, edId: 2009 } }, desc: ["Снимает блокировку чата (мут)", "Действует моментально"] },
+            { id: "unban", name: "Разбан", icon: "🔓", type: "flat", prices: { "30": { price: 249, edId: 2010 } }, desc: ["Снимает блокировку аккаунта (бан)", "Действует моментально"] }
+        ];
+
+        let currentItem = items[0]; let currentDuration = "30";
+        const itemListEl = document.getElementById("item-list"); const detailsListEl = document.getElementById("details-list"); const totalPriceEl = document.getElementById("total-price"); const durationSelector = document.getElementById("duration-selector");
+
+        function renderItems() { itemListEl.innerHTML = ""; items.forEach(item => { const div = document.createElement("div"); div.className = `item ${currentItem.id === item.id ? 'active' : ''}`; div.onclick = () => selectItem(item); let minPrice = Infinity; Object.values(item.prices).forEach(p => { if (p.price < minPrice) minPrice = p.price; }); div.innerHTML = `<div class="item-left"><div class="item-icon">${item.icon}</div><div>${item.name}</div></div><div class="item-price">от ${minPrice} РУБ</div>`; itemListEl.appendChild(div); }); }
+        function selectItem(item) { currentItem = item; renderItems(); updateDetails(); }
+        function updateDetails() { if (currentItem.type === "flat") { durationSelector.style.display = "none"; currentDuration = "30"; } else { durationSelector.style.display = "flex"; } const priceObj = currentItem.prices[currentDuration]; detailsListEl.innerHTML = currentItem.desc.map(line => { if (line.includes("/") || line.includes("[")) { return `<li><span>${line}</span></li>`; } return `<li>${line}</li>`; }).join(""); totalPriceEl.innerText = priceObj ? priceObj.price : "N/A"; }
+        document.querySelectorAll(".duration-btn").forEach(btn => { btn.addEventListener("click", (e) => { document.querySelectorAll(".duration-btn").forEach(b => b.classList.remove("active")); e.target.classList.add("active"); currentDuration = e.target.dataset.duration; updateDetails(); }); });
+        function switchTab(tab) { const shopSection = document.getElementById("shop-section"); const rulesSection = document.getElementById("rules-section"); const navShop = document.getElementById("nav-shop"); const navRules = document.getElementById("nav-rules"); if (tab === 'shop') { shopSection.style.display = "flex"; rulesSection.style.display = "none"; navShop.classList.add("active"); navRules.classList.remove("active"); } else { shopSection.style.display = "none"; rulesSection.style.display = "block"; navShop.classList.remove("active"); navRules.classList.add("active"); } }
+
+        const modal = document.getElementById("payment-modal"); function openPaymentModal() { document.getElementById("modal-title").innerText = `Покупка "${currentItem.name}"`; modal.style.display = "flex"; } function closePaymentModal() { modal.style.display = "none"; }
+
+        async function processPayment() {
+            const nick = document.getElementById("input-nick").value; const email = document.getElementById("input-email").value; const payBtn = document.getElementById("pay-btn");
+            if (!nick || !email) { alert("Пожалуйста, заполните никнейм и почту!"); return; }
+            payBtn.disabled = true; payBtn.innerText = "Создание платежа...";
+            const priceObj = currentItem.prices[currentDuration]; if (!priceObj || !priceObj.edId) { alert("Ошибка: ID товара не настроен!"); payBtn.disabled = false; payBtn.innerText = "Оплатить"; return; }
+            
+            const PROXY_URL = "https://spagrief-proxy.ВАШ_АККАУНТ.workers.dev"; 
+            
+            try {
+                const request = await fetch(PROXY_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: nick, server_id: 143248, email: email, products: [{ id: priceObj.edId, quantity: 1 }] }),
+                });
+                const response = await request.json();
+                if (response.success && response.data && response.data.url) { window.location.href = response.data.url; } 
+                else { console.error(response); alert("Ошибка создания платежа. Проверьте консоль (F12)."); payBtn.disabled = false; payBtn.innerText = "Оплатить"; }
+            } catch (error) { console.error(error); alert("Произошла ошибка при подключении к платежной системе."); payBtn.disabled = false; payBtn.innerText = "Оплатить"; }
+        }
+        renderItems(); updateDetails();
+    </script>
+</body>
+</html>
