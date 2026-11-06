@@ -227,9 +227,28 @@
             margin-bottom: 30px;
         }
 
-        .info_desc li span {
-            color: var(--text-main);
-            font-weight: 600;
+        .info_desc li { margin-bottom: 5px; }
+        
+        .info_desc .highlight {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        .info_desc .highlight-white {
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .info_desc .arrow {
+            color: var(--text-muted);
+        }
+
+        .info_desc .desc-title {
+            color: var(--primary);
+            font-weight: 700;
+            display: block;
+            margin-top: 10px;
+            margin-bottom: 5px;
         }
 
         .buy_action {
@@ -404,7 +423,7 @@
             text-decoration: underline;
         }
 
-        #rules_section {
+        #rules_section, #contacts_section {
             display: none;
         }
 
@@ -429,6 +448,81 @@
             color: var(--primary);
             font-weight: 700;
             margin-right: 5px;
+        }
+
+        .contacts_box {
+            padding: 40px;
+            margin-bottom: 40px;
+        }
+
+        .contacts_box h2 {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+
+        .contact_row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .contact_row:last-child {
+            border-bottom: none;
+        }
+
+        .contact_text {
+            color: #fff;
+            font-size: 15px;
+            line-height: 1.6;
+            font-weight: 600;
+            max-width: 60%;
+        }
+
+        .contact_text span {
+            color: var(--text-muted);
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        .btn_contact_outline {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: #fff;
+            padding: 12px 35px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+            display: inline-block;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .btn_contact_outline:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .btn_contact_filled {
+            background: var(--primary);
+            border: 1px solid var(--primary);
+            color: #fff;
+            padding: 12px 35px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            transition: 0.3s;
+            display: inline-block;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .btn_contact_filled:hover {
+            background: var(--primary-hover);
         }
 
         .footer-container {
@@ -458,6 +552,8 @@
             .buy_action { flex-direction: column; gap: 15px; align-items: stretch; }
             .btn_buy { text-align: center; }
             .footer { flex-direction: column; gap: 15px; text-align: center; }
+            .contact_row { flex-direction: column; align-items: flex-start; gap: 15px; }
+            .contact_text { max-width: 100%; }
         }
     </style>
 </head>
@@ -470,7 +566,7 @@
                 <div class="main_menu">
                     <a id="nav-shop" class="active" onclick="switchTab('shop')">Главная</a>
                     <a id="nav-rules" onclick="switchTab('rules')">Правила</a>
-                    <a href="https://discord.gg/ваша-ссылка" target="_blank">Контакты</a>
+                    <a id="nav-contacts" onclick="switchTab('contacts')">Контакты</a>
                 </div>
             </div>
         </div>
@@ -590,6 +686,36 @@
         </div>
     </div>
 
+    <div class="main" id="contacts_section">
+        <div class="contacts_box box_light">
+            <h2>Остались вопросы? Напиши нам в соц.сетях:</h2>
+            
+            <div class="contact_row">
+                <div class="contact_text">
+                    А ты уже есть в нашем Discord-сервере?<br>
+                    Скорее подключайся!
+                </div>
+                <a href="https://discord.gg/ваша-ссылка" target="_blank" class="btn_contact_outline">Подключиться</a>
+            </div>
+
+            <div class="contact_row">
+                <div class="contact_text">
+                    Наш Telegram-канал: новости и общение.<br>
+                    <span>Будь в курсе всех событий сервера!</span>
+                </div>
+                <a href="https://t.me/ваша-ссылка" target="_blank" class="btn_contact_filled">Подписаться</a>
+            </div>
+
+            <div class="contact_row">
+                <div class="contact_text">
+                    Имеются другие вопросы?<br>
+                    Пиши на нашу почту:
+                </div>
+                <a href="mailto:support@spagrief.fun" class="btn_contact_outline">support@spagrief.fun</a>
+            </div>
+        </div>
+    </div>
+
     <div class="item_modal" id="item_modal">
         <div class="modal_content">
             <div class="close_modal" onclick="closeModal()">×</div>
@@ -603,7 +729,7 @@
 
             <div class="input_row" id="group_promo_qty" style="display: none;">
                 <input class="input_field" type="text" id="input_promo_key" placeholder="Промокод">
-                <input class="input_field" type="number" id="input_qty" placeholder="Кол-во товара" value="1" min="1">
+                <input class="input_field" type="number" id="input_qty" placeholder="Кол-во" value="1" min="1">
             </div>
 
             <div class="input_row" id="group_tokens" style="display: none;">
@@ -636,16 +762,16 @@
         const SERVER_ID = 143248;
 
         const items = [
-            { id: "baron", name: "Барон", icon: "👑", type: "rank", prices: { "30": { price: 49, edId: 1000 }, "90": { price: 89, edId: 1001 }, "forever": { price: 139, edId: 1002 } }, desc: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон ⇒ Получить набор Барона", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 2", "Регионов: 3 блоков", "Слотов на Аукционе: 6", "Задержка телепорта: 7 сек"] },
-            { id: "strazh", name: "Страж", icon: "🛡️", type: "rank", prices: { "30": { price: 89, edId: 1003 }, "90": { price: 179, edId: 1004 }, "forever": { price: 279, edId: 1005 } }, desc: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж ⇒ Получить набор Стража", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 3", "Регионов: 5 блоков", "Слотов на Аукционе: 8", "Задержка телепорта: 6 сек"] },
-            { id: "geroy", name: "Герой", icon: "🦸", type: "rank", prices: { "30": { price: 139, edId: 1006 }, "90": { price: 279, edId: 1007 }, "forever": { price: 379, edId: 1008 } }, desc: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой ⇒ Получить набор Героя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 4", "Регионов: 7 блоков", "Слотов на Аукционе: 10", "Задержка телепорта: 5 сек"] },
-            { id: "aspid", name: "Аспид", icon: "🐍", type: "rank", prices: { "30": { price: 179, edId: 1009 }, "90": { price: 379, edId: 1010 }, "forever": { price: 579, edId: 1011 } }, desc: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид ⇒ Получить набор Аспида", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 5", "Регионов: 9 блоков", "Слотов на Аукционе: 12", "Задержка телепорта: 4 сек"] },
-            { id: "skvid", name: "Сквик", icon: "🦑", type: "rank", prices: { "30": { price: 279, edId: 1012 }, "90": { price: 579, edId: 1013 }, "forever": { price: 879, edId: 1014 } }, desc: ["Префикс в чате и табе: [Сквик] ВашНик", "/kit Сквик ⇒ Получить набор Сквика", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 6", "Регионов: 11 блоков", "Слотов на Аукционе: 14", "Задержка телепорта: 3 сек"] },
-            { id: "glava", name: "Глава", icon: "🎩", type: "rank", prices: { "30": { price: 379, edId: 1015 }, "90": { price: 779, edId: 1016 }, "forever": { price: 1179, edId: 1017 } }, desc: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава ⇒ Получить набор Главы", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 7", "Регионов: 13 блоков", "Слотов на Аукционе: 16", "Задержка телепорта: 2 сек"] },
-            { id: "elita", name: "Элита", icon: "💎", type: "rank", prices: { "30": { price: 579, edId: 1018 }, "90": { price: 1179, edId: 1019 }, "forever": { price: 1779, edId: 1020 } }, desc: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита ⇒ Получить набор Элиты", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 8", "Регионов: 15 блоков", "Слотов на Аукционе: 18", "Задержка телепорта: 1 сек"] },
-            { id: "prints", name: "Принц", icon: "🤴", type: "rank", prices: { "30": { price: 979, edId: 1021 }, "90": { price: 1979, edId: 1022 }, "forever": { price: 2979, edId: 1023 } }, desc: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц ⇒ Получить набор Принца", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 9", "Регионов: 17 блоков", "Слотов на Аукционе: 20", "Задержка телепорта: 0 сек"] },
-            { id: "knyaz", name: "Князь", icon: "👑", type: "rank", prices: { "30": { price: 1299, edId: 1024 }, "90": { price: 2599, edId: 1025 }, "forever": { price: 3899, edId: 1026 } }, desc: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь ⇒ Получить набор Князя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 10", "Регионов: 20 блоков", "Слотов на Аукционе: 25", "Задержка телепорта: 0 сек"] },
-            { id: "gertsog", name: "Герцог", icon: "👑", type: "rank", prices: { "30": { price: 2799, edId: 1027 }, "90": { price: 5599, edId: 1028 }, "forever": { price: 8399, edId: 1029 } }, desc: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог ⇒ Получить набор Герцога", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 15", "Регионов: 30 блоков", "Слотов на Аукционе: 40", "Задержка телепорта: 0 сек"] },
+            { id: "baron", name: "Барон", icon: "👑", type: "rank", prices: { "30": { price: 49, edId: 1000 }, "90": { price: 89, edId: 1001 }, "forever": { price: 139, edId: 1002 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Барон]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Барон</span> <span class='arrow'>⇒</span> Получить набор Барона", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>2</span>", "Регионов: <span class='highlight'>3</span> блоков", "Слотов на Аукционе: <span class='highlight'>6</span>", "Задержка телепорта: <span class='highlight'>7</span> сек"] },
+            { id: "strazh", name: "Страж", icon: "🛡️", type: "rank", prices: { "30": { price: 89, edId: 1003 }, "90": { price: 179, edId: 1004 }, "forever": { price: 279, edId: 1005 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Страж]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Страж</span> <span class='arrow'>⇒</span> Получить набор Стража", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>3</span>", "Регионов: <span class='highlight'>5</span> блоков", "Слотов на Аукционе: <span class='highlight'>8</span>", "Задержка телепорта: <span class='highlight'>6</span> сек"] },
+            { id: "geroy", name: "Герой", icon: "🦸", type: "rank", prices: { "30": { price: 139, edId: 1006 }, "90": { price: 279, edId: 1007 }, "forever": { price: 379, edId: 1008 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Герой]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Герой</span> <span class='arrow'>⇒</span> Получить набор Героя", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>4</span>", "Регионов: <span class='highlight'>7</span> блоков", "Слотов на Аукционе: <span class='highlight'>10</span>", "Задержка телепорта: <span class='highlight'>5</span> сек"] },
+            { id: "aspid", name: "Аспид", icon: "🐍", type: "rank", prices: { "30": { price: 179, edId: 1009 }, "90": { price: 379, edId: 1010 }, "forever": { price: 579, edId: 1011 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Аспид]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Аспид</span> <span class='arrow'>⇒</span> Получить набор Аспида", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>5</span>", "Регионов: <span class='highlight'>9</span> блоков", "Слотов на Аукционе: <span class='highlight'>12</span>", "Задержка телепорта: <span class='highlight'>4</span> сек"] },
+            { id: "skvid", name: "Сквик", icon: "🦑", type: "rank", prices: { "30": { price: 279, edId: 1012 }, "90": { price: 579, edId: 1013 }, "forever": { price: 879, edId: 1014 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Сквик]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Сквик</span> <span class='arrow'>⇒</span> Получить набор Сквика", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>6</span>", "Регионов: <span class='highlight'>11</span> блоков", "Слотов на Аукционе: <span class='highlight'>14</span>", "Задержка телепорта: <span class='highlight'>3</span> сек"] },
+            { id: "glava", name: "Глава", icon: "🎩", type: "rank", prices: { "30": { price: 379, edId: 1015 }, "90": { price: 779, edId: 1016 }, "forever": { price: 1179, edId: 1017 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Глава]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Глава</span> <span class='arrow'>⇒</span> Получить набор Главы", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>7</span>", "Регионов: <span class='highlight'>13</span> блоков", "Слотов на Аукционе: <span class='highlight'>16</span>", "Задержка телепорта: <span class='highlight'>2</span> сек"] },
+            { id: "elita", name: "Элита", icon: "💎", type: "rank", prices: { "30": { price: 579, edId: 1018 }, "90": { price: 1179, edId: 1019 }, "forever": { price: 1779, edId: 1020 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Элита]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Элита</span> <span class='arrow'>⇒</span> Получить набор Элиты", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>8</span>", "Регионов: <span class='highlight'>15</span> блоков", "Слотов на Аукционе: <span class='highlight'>18</span>", "Задержка телепорта: <span class='highlight'>1</span> сек"] },
+            { id: "prints", name: "Принц", icon: "🤴", type: "rank", prices: { "30": { price: 979, edId: 1021 }, "90": { price: 1979, edId: 1022 }, "forever": { price: 2979, edId: 1023 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Принц]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Принц</span> <span class='arrow'>⇒</span> Получить набор Принца", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>9</span>", "Регионов: <span class='highlight'>17</span> блоков", "Слотов на Аукционе: <span class='highlight'>20</span>", "Задержка телепорта: <span class='highlight'>0</span> сек"] },
+            { id: "knyaz", name: "Князь", icon: "👑", type: "rank", prices: { "30": { price: 1299, edId: 1024 }, "90": { price: 2599, edId: 1025 }, "forever": { price: 3899, edId: 1026 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Князь]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Князь</span> <span class='arrow'>⇒</span> Получить набор Князя", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>10</span>", "Регионов: <span class='highlight'>20</span> блоков", "Слотов на Аукционе: <span class='highlight'>25</span>", "Задержка телепорта: <span class='highlight'>0</span> сек"] },
+            { id: "gertsog", name: "Герцог", icon: "👑", type: "rank", prices: { "30": { price: 2799, edId: 1027 }, "90": { price: 5599, edId: 1028 }, "forever": { price: 8399, edId: 1029 } }, desc: ["Префикс в чате и табе: <span class='highlight-white'>[Герцог]</span> <span class='highlight-white'>ВашНик</span>", "<span class='highlight'>/kit Герцог</span> <span class='arrow'>⇒</span> Получить набор Герцога", "<span class='highlight'>/salary</span> <span class='arrow'>⇒</span> Получить зарплату", "<span class='highlight'>/crawl</span> <span class='arrow'>⇒</span> Сменить позу: красться", "<span class='desc-title'>Прочее:</span>", "Доступно Точек домов: <span class='highlight'>15</span>", "Регионов: <span class='highlight'>30</span> блоков", "Слотов на Аукционе: <span class='highlight'>40</span>", "Задержка телепорта: <span class='highlight'>0</span> сек"] },
             { id: "tokens", name: "Токены", icon: "💎", type: "tokens", basePrice: 15, desc: ["Игровая валюта для магазина /shop", "Позволяет покупать ресурсы и предметы", "Не имеет срока действия"] },
             { id: "ex_balance", name: "Биржа Баланс", icon: "⚖️", type: "tokens", basePrice: 15, desc: ["Пополнение баланса на бирже", "Используется для торговли с другими игроками"] },
             { id: "key_common", name: "Обычный Ключ", icon: "🔑", type: "key", price: 10, edId: 2002, desc: ["Ключ для открытия кейсов", "Содержит базовые ресурсы"] },
@@ -679,19 +805,27 @@
         function switchTab(tab) {
             const shopSection = document.getElementById("shop_section");
             const rulesSection = document.getElementById("rules_section");
+            const contactsSection = document.getElementById("contacts_section");
             const navShop = document.getElementById("nav-shop");
             const navRules = document.getElementById("nav-rules");
+            const navContacts = document.getElementById("nav-contacts");
+
+            shopSection.style.display = "none";
+            rulesSection.style.display = "none";
+            contactsSection.style.display = "none";
+            navShop.classList.remove("active");
+            navRules.classList.remove("active");
+            navContacts.classList.remove("active");
 
             if (tab === 'shop') {
                 shopSection.style.display = "block";
-                rulesSection.style.display = "none";
                 navShop.classList.add("active");
-                navRules.classList.remove("active");
-            } else {
-                shopSection.style.display = "none";
+            } else if (tab === 'rules') {
                 rulesSection.style.display = "block";
-                navShop.classList.remove("active");
                 navRules.classList.add("active");
+            } else if (tab === 'contacts') {
+                contactsSection.style.display = "block";
+                navContacts.classList.add("active");
             }
         }
 
@@ -751,7 +885,7 @@
             html += `
                 <div class="info_title">Возможности привилегии:</div>
                 <ul class="info_desc">
-                    ${currentItem.desc.map(line => `<li><span>${line}</span></li>`).join("")}
+                    ${currentItem.desc.map(line => `<li>${line}</li>`).join("")}
                 </ul>
                 <div class="buy_action">
                     <div class="price_label">Стоимость: <span>${displayPrice}</span> руб.</div>
@@ -844,15 +978,15 @@
 
             let productId = null;
             let quantity = 1;
-            let promoValue = "";
+            let rawPromo = "";
 
             if (currentItem.type === "rank") {
                 productId = currentItem.prices[currentDuration].edId;
-                promoValue = document.getElementById("input_promo").value;
+                rawPromo = document.getElementById("input_promo").value;
             } else if (currentItem.type === "tokens") {
                 productId = 2000;
                 quantity = parseFloat(inputRub.value) || 0;
-                promoValue = document.getElementById("input_promo").value;
+                rawPromo = document.getElementById("input_promo").value;
                 if (quantity <= 0) {
                     alert("Введите сумму больше 0!");
                     return;
@@ -860,7 +994,14 @@
             } else {
                 productId = currentItem.edId;
                 quantity = parseInt(inputQty.value) || 1;
-                promoValue = document.getElementById("input_promo_key").value;
+                rawPromo = document.getElementById("input_promo_key").value;
+            }
+
+            let sanitizedPromo = rawPromo.trim().toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+            if (sanitizedPromo.length > 0 && (sanitizedPromo.length < 2 || sanitizedPromo.length > 16)) {
+                alert("Промокод должен состоять из латинских букв и цифр (от 2 до 16 символов). Проверьте введенный код.");
+                return;
             }
 
             btn.disabled = true;
@@ -878,8 +1019,8 @@
                 ]
             };
 
-            if (promoValue) {
-                payload.promocode = promoValue;
+            if (sanitizedPromo.length > 0) {
+                payload.promocode = sanitizedPromo;
             }
 
             try {
