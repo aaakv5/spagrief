@@ -297,7 +297,7 @@
             payBtn.disabled = true; payBtn.innerText = "Создание платежа...";
             const priceObj = currentItem.prices[currentDuration]; if (!priceObj || !priceObj.edId) { alert("Ошибка: ID товара не настроен!"); payBtn.disabled = false; payBtn.innerText = "Оплатить"; return; }
             
-            const PROXY_URL = "https://spagrief-proxy.aquadark5647.workers.dev"; 
+            const PROXY_URL = "https://spagrief-easydonate.aquadark5647.workers.dev";
             
             try {
                 const request = await fetch(PROXY_URL, {
