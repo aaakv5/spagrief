@@ -16,6 +16,7 @@
             --text-main: #ffffff;
             --text-muted: #8b8b93;
             --border-color: #2a2a30;
+            --logo-cream: #fcfce3;
         }
 
         * {
@@ -33,6 +34,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
         }
 
         a { text-decoration: none; color: inherit; }
@@ -51,6 +53,7 @@
             top: 0;
             z-index: 100;
             backdrop-filter: blur(10px);
+            width: 100%;
         }
 
         .topline {
@@ -66,6 +69,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             cursor: pointer;
+            color: var(--logo-cream);
         }
 
         .logo span {
@@ -92,14 +96,18 @@
         }
 
         .main {
-            margin: 40px 0;
+            margin: 40px auto;
             flex: 1;
+            width: 100%;
+            max-width: 1200px;
+            padding: 0 20px;
         }
 
         .row {
             display: flex;
             gap: 30px;
             align-items: flex-start;
+            justify-content: center;
         }
 
         .box_light {
@@ -305,10 +313,10 @@
 
         .modal_title span { color: var(--primary); }
 
-        .input_group {
-            margin-bottom: 15px;
+        .input_row {
             display: flex;
             gap: 15px;
+            margin-bottom: 15px;
         }
 
         .input_field {
@@ -321,6 +329,12 @@
             border-radius: 4px;
             outline: none;
             transition: border 0.3s;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .input_row .input_field {
+            margin-bottom: 0;
         }
 
         .input_field:focus {
@@ -329,7 +343,6 @@
 
         .input_field::placeholder {
             color: var(--text-muted);
-            text-align: center;
         }
 
         .modal_footer {
@@ -423,6 +436,7 @@
             border-top: 1px solid var(--border-color);
             padding: 20px 0;
             margin-top: 40px;
+            width: 100%;
         }
 
         .footer {
@@ -452,7 +466,7 @@
     <div class="header">
         <div class="container">
             <div class="topline">
-                <a class="logo" onclick="switchTab('shop')">Spa<span>Grief</span></a>
+                <a class="logo" onclick="switchTab('shop')"><span>Spa</span>Grief</a>
                 <div class="main_menu">
                     <a id="nav-shop" class="active" onclick="switchTab('shop')">Главная</a>
                     <a id="nav-rules" onclick="switchTab('rules')">Правила</a>
@@ -462,7 +476,7 @@
         </div>
     </div>
 
-    <div class="main container" id="shop_section">
+    <div class="main" id="shop_section">
         <div class="row">
             <div class="col-left">
                 <div class="box_light">
@@ -476,7 +490,7 @@
         </div>
     </div>
 
-    <div class="main container" id="rules_section">
+    <div class="main" id="rules_section">
         <div class="rule_box box_light">
             <h2>1. Основные правила:</h2>
             <div class="rule_text">
@@ -581,21 +595,20 @@
             <div class="close_modal" onclick="closeModal()">×</div>
             <p class="modal_title" id="modal_title">Покупка <span>"Товар"</span></p>
             
-            <div class="input_group">
-                <input class="input_field" type="text" id="input_nick" placeholder="Ник получателя">
-            </div>
+            <input class="input_field" type="text" id="input_nick" placeholder="Ник получателя">
             
-            <div class="input_group">
+            <div id="group_promo">
                 <input class="input_field" type="text" id="input_promo" placeholder="Промокод">
             </div>
 
-            <div class="input_group" id="amount_group" style="display: none;">
-                <input class="input_field" type="number" id="input_rub" placeholder="Сумма в рублях">
-                <input class="input_field" type="number" id="input_tokens" placeholder="Кол-во токенов">
+            <div class="input_row" id="group_promo_qty" style="display: none;">
+                <input class="input_field" type="text" id="input_promo_key" placeholder="Промокод">
+                <input class="input_field" type="number" id="input_qty" placeholder="Кол-во товара" value="1" min="1">
             </div>
 
-            <div class="input_group" id="quantity_group" style="display: none;">
-                <input class="input_field" type="number" id="input_qty" placeholder="Кол-во товара" value="1" min="1">
+            <div class="input_row" id="group_tokens" style="display: none;">
+                <input class="input_field" type="number" id="input_rub" placeholder="Сумма в рублях">
+                <input class="input_field" type="number" id="input_tokens" placeholder="Кол-во токенов">
             </div>
 
             <div class="modal_footer">
@@ -623,56 +636,16 @@
         const SERVER_ID = 143248;
 
         const items = [
-            { 
-                id: "baron", name: "Барон", icon: "👑", type: "rank",
-                prices: { "30": { price: 49, edId: 1000 }, "90": { price: 89, edId: 1001 }, "forever": { price: 139, edId: 1002 } },
-                desc: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон ⇒ Получить набор Барона", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 2", "Регионов: 3 блоков", "Слотов на Аукционе: 6", "Задержка телепорта: 7 сек"]
-            },
-            { 
-                id: "strazh", name: "Страж", icon: "🛡️", type: "rank",
-                prices: { "30": { price: 89, edId: 1003 }, "90": { price: 179, edId: 1004 }, "forever": { price: 279, edId: 1005 } },
-                desc: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж ⇒ Получить набор Стража", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 3", "Регионов: 5 блоков", "Слотов на Аукционе: 8", "Задержка телепорта: 6 сек"]
-            },
-            { 
-                id: "geroy", name: "Герой", icon: "🦸", type: "rank",
-                prices: { "30": { price: 139, edId: 1006 }, "90": { price: 279, edId: 1007 }, "forever": { price: 379, edId: 1008 } },
-                desc: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой ⇒ Получить набор Героя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 4", "Регионов: 7 блоков", "Слотов на Аукционе: 10", "Задержка телепорта: 5 сек"]
-            },
-            { 
-                id: "aspid", name: "Аспид", icon: "🐍", type: "rank",
-                prices: { "30": { price: 179, edId: 1009 }, "90": { price: 379, edId: 1010 }, "forever": { price: 579, edId: 1011 } },
-                desc: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид ⇒ Получить набор Аспида", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 5", "Регионов: 9 блоков", "Слотов на Аукционе: 12", "Задержка телепорта: 4 сек"]
-            },
-            { 
-                id: "skvid", name: "Сквик", icon: "🦑", type: "rank",
-                prices: { "30": { price: 279, edId: 1012 }, "90": { price: 579, edId: 1013 }, "forever": { price: 879, edId: 1014 } },
-                desc: ["Префикс в чате и табе: [Сквик] ВашНик", "/kit Сквик ⇒ Получить набор Сквика", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 6", "Регионов: 11 блоков", "Слотов на Аукционе: 14", "Задержка телепорта: 3 сек"]
-            },
-            { 
-                id: "glava", name: "Глава", icon: "🎩", type: "rank",
-                prices: { "30": { price: 379, edId: 1015 }, "90": { price: 779, edId: 1016 }, "forever": { price: 1179, edId: 1017 } },
-                desc: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава ⇒ Получить набор Главы", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 7", "Регионов: 13 блоков", "Слотов на Аукционе: 16", "Задержка телепорта: 2 сек"]
-            },
-            { 
-                id: "elita", name: "Элита", icon: "💎", type: "rank",
-                prices: { "30": { price: 579, edId: 1018 }, "90": { price: 1179, edId: 1019 }, "forever": { price: 1779, edId: 1020 } },
-                desc: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита ⇒ Получить набор Элиты", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 8", "Регионов: 15 блоков", "Слотов на Аукционе: 18", "Задержка телепорта: 1 сек"]
-            },
-            { 
-                id: "prints", name: "Принц", icon: "🤴", type: "rank",
-                prices: { "30": { price: 979, edId: 1021 }, "90": { price: 1979, edId: 1022 }, "forever": { price: 2979, edId: 1023 } },
-                desc: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц ⇒ Получить набор Принца", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 9", "Регионов: 17 блоков", "Слотов на Аукционе: 20", "Задержка телепорта: 0 сек"]
-            },
-            { 
-                id: "knyaz", name: "Князь", icon: "👑", type: "rank",
-                prices: { "30": { price: 1299, edId: 1024 }, "90": { price: 2599, edId: 1025 }, "forever": { price: 3899, edId: 1026 } },
-                desc: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь ⇒ Получить набор Князя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 10", "Регионов: 20 блоков", "Слотов на Аукционе: 25", "Задержка телепорта: 0 сек"]
-            },
-            { 
-                id: "gertsog", name: "Герцог", icon: "👑", type: "rank",
-                prices: { "30": { price: 2799, edId: 1027 }, "90": { price: 5599, edId: 1028 }, "forever": { price: 8399, edId: 1029 } },
-                desc: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог ⇒ Получить набор Герцога", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 15", "Регионов: 30 блоков", "Слотов на Аукционе: 40", "Задержка телепорта: 0 сек"]
-            },
+            { id: "baron", name: "Барон", icon: "👑", type: "rank", prices: { "30": { price: 49, edId: 1000 }, "90": { price: 89, edId: 1001 }, "forever": { price: 139, edId: 1002 } }, desc: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон ⇒ Получить набор Барона", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 2", "Регионов: 3 блоков", "Слотов на Аукционе: 6", "Задержка телепорта: 7 сек"] },
+            { id: "strazh", name: "Страж", icon: "🛡️", type: "rank", prices: { "30": { price: 89, edId: 1003 }, "90": { price: 179, edId: 1004 }, "forever": { price: 279, edId: 1005 } }, desc: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж ⇒ Получить набор Стража", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 3", "Регионов: 5 блоков", "Слотов на Аукционе: 8", "Задержка телепорта: 6 сек"] },
+            { id: "geroy", name: "Герой", icon: "🦸", type: "rank", prices: { "30": { price: 139, edId: 1006 }, "90": { price: 279, edId: 1007 }, "forever": { price: 379, edId: 1008 } }, desc: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой ⇒ Получить набор Героя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 4", "Регионов: 7 блоков", "Слотов на Аукционе: 10", "Задержка телепорта: 5 сек"] },
+            { id: "aspid", name: "Аспид", icon: "🐍", type: "rank", prices: { "30": { price: 179, edId: 1009 }, "90": { price: 379, edId: 1010 }, "forever": { price: 579, edId: 1011 } }, desc: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид ⇒ Получить набор Аспида", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 5", "Регионов: 9 блоков", "Слотов на Аукционе: 12", "Задержка телепорта: 4 сек"] },
+            { id: "skvid", name: "Сквик", icon: "🦑", type: "rank", prices: { "30": { price: 279, edId: 1012 }, "90": { price: 579, edId: 1013 }, "forever": { price: 879, edId: 1014 } }, desc: ["Префикс в чате и табе: [Сквик] ВашНик", "/kit Сквик ⇒ Получить набор Сквика", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 6", "Регионов: 11 блоков", "Слотов на Аукционе: 14", "Задержка телепорта: 3 сек"] },
+            { id: "glava", name: "Глава", icon: "🎩", type: "rank", prices: { "30": { price: 379, edId: 1015 }, "90": { price: 779, edId: 1016 }, "forever": { price: 1179, edId: 1017 } }, desc: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава ⇒ Получить набор Главы", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 7", "Регионов: 13 блоков", "Слотов на Аукционе: 16", "Задержка телепорта: 2 сек"] },
+            { id: "elita", name: "Элита", icon: "💎", type: "rank", prices: { "30": { price: 579, edId: 1018 }, "90": { price: 1179, edId: 1019 }, "forever": { price: 1779, edId: 1020 } }, desc: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита ⇒ Получить набор Элиты", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 8", "Регионов: 15 блоков", "Слотов на Аукционе: 18", "Задержка телепорта: 1 сек"] },
+            { id: "prints", name: "Принц", icon: "🤴", type: "rank", prices: { "30": { price: 979, edId: 1021 }, "90": { price: 1979, edId: 1022 }, "forever": { price: 2979, edId: 1023 } }, desc: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц ⇒ Получить набор Принца", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 9", "Регионов: 17 блоков", "Слотов на Аукционе: 20", "Задержка телепорта: 0 сек"] },
+            { id: "knyaz", name: "Князь", icon: "👑", type: "rank", prices: { "30": { price: 1299, edId: 1024 }, "90": { price: 2599, edId: 1025 }, "forever": { price: 3899, edId: 1026 } }, desc: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь ⇒ Получить набор Князя", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 10", "Регионов: 20 блоков", "Слотов на Аукционе: 25", "Задержка телепорта: 0 сек"] },
+            { id: "gertsog", name: "Герцог", icon: "👑", type: "rank", prices: { "30": { price: 2799, edId: 1027 }, "90": { price: 5599, edId: 1028 }, "forever": { price: 8399, edId: 1029 } }, desc: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог ⇒ Получить набор Герцога", "/salary ⇒ Получить зарплату", "/crawl ⇒ Сменить позу: красться", "Доступно Точек домов: 15", "Регионов: 30 блоков", "Слотов на Аукционе: 40", "Задержка телепорта: 0 сек"] },
             { id: "tokens", name: "Токены", icon: "💎", type: "tokens", basePrice: 15, desc: ["Игровая валюта для магазина /shop", "Позволяет покупать ресурсы и предметы", "Не имеет срока действия"] },
             { id: "ex_balance", name: "Биржа Баланс", icon: "⚖️", type: "tokens", basePrice: 15, desc: ["Пополнение баланса на бирже", "Используется для торговли с другими игроками"] },
             { id: "key_common", name: "Обычный Ключ", icon: "🔑", type: "key", price: 10, edId: 2002, desc: ["Ключ для открытия кейсов", "Содержит базовые ресурсы"] },
@@ -688,16 +661,17 @@
 
         let currentItem = items[0];
         let currentDuration = "30";
-        let finalPrice = 0;
-        let finalEdId = 0;
 
         const itemsListEl = document.getElementById("items_list");
         const itemInfoEl = document.getElementById("item_info");
         const modal = document.getElementById("item_modal");
         const modalTitle = document.getElementById("modal_title");
         const modalPriceVal = document.getElementById("modal_price_val");
-        const amountGroup = document.getElementById("amount_group");
-        const quantityGroup = document.getElementById("quantity_group");
+        
+        const groupPromo = document.getElementById("group_promo");
+        const groupPromoQty = document.getElementById("group_promo_qty");
+        const groupTokens = document.getElementById("group_tokens");
+        
         const inputRub = document.getElementById("input_rub");
         const inputTokens = document.getElementById("input_tokens");
         const inputQty = document.getElementById("input_qty");
@@ -794,21 +768,28 @@
 
         function openModal() {
             modalTitle.innerHTML = `Покупка <span>"${currentItem.name}"</span>`;
-            amountGroup.style.display = "none";
-            quantityGroup.style.display = "none";
+            groupPromo.style.display = "none";
+            groupPromoQty.style.display = "none";
+            groupTokens.style.display = "none";
+            
             inputRub.value = "";
             inputTokens.value = "";
             inputQty.value = "1";
+            document.getElementById("input_nick").value = "";
+            document.getElementById("input_promo").value = "";
+            document.getElementById("input_promo_key").value = "";
 
             if (currentItem.type === "tokens") {
-                amountGroup.style.display = "flex";
+                groupPromo.style.display = "block";
+                groupTokens.style.display = "flex";
                 inputRub.value = currentItem.basePrice;
                 inputTokens.value = currentItem.basePrice * 100;
                 updateModalPrice();
             } else if (currentItem.type === "key") {
-                quantityGroup.style.display = "flex";
+                groupPromoQty.style.display = "flex";
                 updateModalPrice();
             } else {
+                groupPromo.style.display = "block";
                 updateModalPrice();
             }
 
@@ -820,6 +801,7 @@
         }
 
         function updateModalPrice() {
+            let finalPrice = 0;
             if (currentItem.type === "tokens") {
                 let rub = parseFloat(inputRub.value) || 0;
                 finalPrice = rub;
@@ -853,7 +835,6 @@
 
         async function processPayment() {
             const nick = document.getElementById("input_nick").value;
-            const promo = document.getElementById("input_promo").value;
             const btn = document.getElementById("btn_check");
 
             if (!nick) {
@@ -863,12 +844,15 @@
 
             let productId = null;
             let quantity = 1;
+            let promoValue = "";
 
             if (currentItem.type === "rank") {
                 productId = currentItem.prices[currentDuration].edId;
+                promoValue = document.getElementById("input_promo").value;
             } else if (currentItem.type === "tokens") {
                 productId = 2000;
                 quantity = parseFloat(inputRub.value) || 0;
+                promoValue = document.getElementById("input_promo").value;
                 if (quantity <= 0) {
                     alert("Введите сумму больше 0!");
                     return;
@@ -876,6 +860,7 @@
             } else {
                 productId = currentItem.edId;
                 quantity = parseInt(inputQty.value) || 1;
+                promoValue = document.getElementById("input_promo_key").value;
             }
 
             btn.disabled = true;
@@ -893,8 +878,8 @@
                 ]
             };
 
-            if (promo) {
-                payload.promocode = promo;
+            if (promoValue) {
+                payload.promocode = promoValue;
             }
 
             try {
