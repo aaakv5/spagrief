@@ -7,211 +7,233 @@
     <meta name="description" content="Официальный донат-магазин Minecraft-сервера SpaGrief. Выдача на ник после оплаты, СБП и карты, без регистрации.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Шрифт максимально похожий на оригинал (Gilroy/Inter) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0d0c0a;
-            --bg-panel: #161513;
-            --bg-card: #1c1a18;
-            --bg-input: #23211f;
+            --bg-main: #0a0a0a;
+            --bg-panel: #121212;
+            --bg-card: #1a1a1a;
+            --bg-input: #222222;
             --accent: #FE2C55;
             --accent-hover: #d62448;
-            --text-main: #f4efe9;
-            --text-muted: #a8a29a;
-            --border-color: #2a2825;
-            --border-radius: 16px;
+            --text-main: #ffffff;
+            --text-muted: #999999;
+            --border-color: #2a2a2a;
+            --radius-lg: 24px;
+            --radius-md: 12px;
             --radius-sm: 8px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Montserrat', sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; display: flex; flex-direction: column; overflow-x: hidden; }
         a { text-decoration: none; color: inherit; }
         ul { list-style: none; }
         button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 
-        .container { max-width: 1400px; margin: 0 auto; padding: 0 24px; width: 100%; }
+        .container { max-width: 1440px; margin: 0 auto; padding: 0 24px; width: 100%; }
 
         /* HEADER */
-        .header { padding: 20px 0; background: var(--bg-main); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border-color); }
+        .header { padding: 20px 0; background: var(--bg-main); position: sticky; top: 0; z-index: 100; }
         .header-inner { display: flex; align-items: center; justify-content: space-between; }
-        .logo-area { display: flex; align-items: center; gap: 20px; }
-        .logo { font-size: 26px; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); display: flex; align-items: center; gap: 4px; }
-        .logo span { color: var(--accent); }
-        .online-badge { background: var(--bg-card); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 6px; border: 1px solid var(--border-color); }
-        .online-badge::before { content: ''; display: block; width: 8px; height: 8px; background: #2ecc71; border-radius: 50%; box-shadow: 0 0 8px #2ecc71; }
+        .logo-area { display: flex; align-items: center; gap: 16px; }
+        .logo { font-size: 22px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; display: flex; align-items: center; }
+        .logo span:first-child { background: var(--accent); padding: 4px 8px; border-radius: 6px; margin-right: 4px; color: #fff; }
+        .logo span:last-child { color: #fff; }
         
-        .nav { display: flex; gap: 8px; background: var(--bg-card); padding: 6px; border-radius: 30px; }
-        .nav a { padding: 10px 20px; font-size: 14px; font-weight: 600; color: var(--text-muted); border-radius: 20px; transition: 0.3s; display: flex; align-items: center; gap: 8px; }
-        .nav a:hover, .nav a.active { background: var(--accent); color: #fff; }
+        .online-badge { background: var(--bg-panel); padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; color: var(--text-muted); display: flex; align-items: center; gap: 8px; }
+        .online-badge svg { width: 16px; height: 16px; fill: var(--text-muted); }
+        
+        .nav { display: flex; gap: 4px; background: var(--bg-panel); padding: 4px; border-radius: 30px; }
+        .nav a { padding: 10px 18px; font-size: 13px; font-weight: 700; color: var(--text-muted); border-radius: 20px; transition: 0.2s; display: flex; align-items: center; gap: 8px; text-transform: uppercase; }
+        .nav a:hover { color: #fff; }
+        .nav a.active { background: var(--bg-card); color: #fff; }
+        .nav a svg { width: 14px; height: 14px; fill: currentColor; }
 
         /* PAGES */
-        .page { display: none; padding: 40px 0; flex: 1; }
+        .page { display: none; padding: 30px 0; flex: 1; }
         .page.active { display: block; }
 
         /* SHOP PAGE */
-        .hero-banners { display: grid; grid-template-columns: 2fr 1fr; gap: 24px; margin-bottom: 40px; }
-        .hero-banner { border-radius: var(--border-radius); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; min-height: 280px; }
-        .hero-main { background: linear-gradient(135deg, #FE2C55 0%, #8a0e25 100%); }
-        .hero-side { background: linear-gradient(135deg, #6a1b9a 0%, #28123e 100%); }
-        .hero-title { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 15px; max-width: 60%; z-index: 2; }
-        .hero-text { font-size: 15px; color: rgba(255,255,255,0.8); max-width: 50%; z-index: 2; font-weight: 500; }
-        .hero-img { position: absolute; right: 0; bottom: 0; height: 100%; object-fit: cover; z-index: 1; opacity: 0.9; pointer-events: none; }
+        .hero-banners { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; margin-bottom: 40px; }
+        .hero-banner { border-radius: var(--radius-lg); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; min-height: 260px; }
+        .hero-main { background: linear-gradient(135deg, #FE2C55 0%, #4a0e1a 100%); }
+        .hero-side { background: linear-gradient(135deg, #4a1b6d 0%, #120d1c 100%); }
+        .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; max-width: 60%; z-index: 2; letter-spacing: -0.5px; }
+        .hero-text { font-size: 15px; color: rgba(255,255,255,0.9); max-width: 50%; z-index: 2; font-weight: 500; line-height: 1.4; }
+        .hero-arrow { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; backdrop-filter: blur(5px); transition: 0.2s; }
+        .hero-banner:hover .hero-arrow { background: rgba(255,255,255,0.4); }
+        /* Заглушка для картинки в баннере */
+        .hero-img-placeholder { position: absolute; right: 0; bottom: 0; width: 55%; height: 100%; background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><text x="50%" y="50%" fill="rgba(255,255,255,0.1)" font-size="20" font-family="sans-serif" text-anchor="middle">Картинка персонажа</text></svg>') no-repeat right bottom; background-size: contain; z-index: 1; }
 
-        .shop-layout { display: grid; grid-template-columns: 280px 1fr; gap: 30px; align-items: start; }
+        .shop-layout { display: grid; grid-template-columns: 260px 1fr; gap: 30px; align-items: start; }
         
         .sidebar { display: flex; flex-direction: column; gap: 30px; }
-        .sidebar-title { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .mode-btn { display: flex; align-items: center; gap: 15px; background: var(--bg-card); padding: 15px; border-radius: var(--radius-sm); border: 2px solid transparent; transition: 0.2s; margin-bottom: 10px; width: 100%; text-align: left; }
+        .sidebar-title { font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        
+        .mode-btn { display: flex; align-items: center; gap: 15px; background: var(--bg-panel); padding: 16px; border-radius: var(--radius-md); border: 1px solid transparent; transition: 0.2s; margin-bottom: 10px; width: 100%; text-align: left; }
         .mode-btn:hover { border-color: var(--border-color); }
-        .mode-btn.active { border-color: var(--accent); background: rgba(254, 44, 85, 0.1); }
-        .mode-btn img { width: 40px; height: 40px; }
-        .mode-btn span { font-weight: 700; font-size: 15px; }
+        .mode-btn.active { border-color: var(--accent); background: rgba(254, 44, 85, 0.05); }
+        .mode-btn .mode-icon { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; font-size: 24px; background: var(--bg-card); border-radius: 8px; }
+        .mode-btn span { font-weight: 700; font-size: 14px; color: var(--text-main); }
 
-        .cat-btn { display: flex; align-items: center; gap: 10px; background: transparent; padding: 12px 15px; border-radius: var(--radius-sm); color: var(--text-muted); font-weight: 600; font-size: 14px; transition: 0.2s; width: 100%; text-align: left; margin-bottom: 5px; }
+        .cat-btn { display: flex; align-items: center; gap: 12px; background: var(--bg-panel); padding: 14px 16px; border-radius: var(--radius-md); color: var(--text-muted); font-weight: 700; font-size: 14px; transition: 0.2s; width: 100%; text-align: left; margin-bottom: 8px; border: 1px solid transparent; }
+        .cat-btn svg { width: 18px; height: 18px; fill: currentColor; }
         .cat-btn:hover { background: var(--bg-card); color: var(--text-main); }
         .cat-btn.active { background: var(--accent); color: #fff; }
 
-        .main-content { background: var(--bg-panel); border-radius: var(--border-radius); padding: 30px; min-height: 500px; }
+        .main-content { }
         .content-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .content-title { font-size: 24px; font-weight: 800; }
-        .compare-btn { background: var(--bg-card); color: var(--text-main); padding: 10px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border: 1px solid var(--border-color); transition: 0.2s; }
-        .compare-btn:hover { border-color: var(--accent); }
+        .content-title { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
+        .compare-btn { background: var(--bg-panel); color: var(--text-main); padding: 12px 20px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600; transition: 0.2s; }
+        .compare-btn:hover { background: var(--bg-card); }
 
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
-        .product-card { background: var(--bg-card); border-radius: var(--radius-sm); padding: 24px; display: flex; flex-direction: column; position: relative; transition: transform 0.2s, box-shadow 0.2s; border: 1px solid var(--border-color); }
-        .product-card:hover { transform: translateY(-5px); border-color: var(--accent); box-shadow: 0 10px 20px rgba(254, 44, 85, 0.1); }
-        .product-badge { position: absolute; top: 15px; right: 15px; background: rgba(46, 204, 113, 0.15); color: #2ecc71; padding: 5px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
-        .product-badge.hot { background: rgba(254, 44, 85, 0.15); color: var(--accent); }
-        .product-img { width: 100px; height: 100px; margin: 20px auto 30px; display: flex; justify-content: center; align-items: center; }
-        .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
-        .product-name { font-size: 18px; font-weight: 800; margin-bottom: 15px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+        
+        .product-card { background: var(--bg-panel); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; position: relative; transition: transform 0.2s, box-shadow 0.2s; }
+        .product-card:hover { transform: translateY(-4px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
+        .product-badges { display: flex; justify-content: space-between; align-items: flex-start; position: absolute; top: 20px; left: 20px; right: 20px; }
+        .badge-hot { background: rgba(254, 44, 85, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+        .badge-tk { background: rgba(46, 204, 113, 0.1); color: #2ecc71; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; margin-left: auto; }
+        
+        /* Плейсхолдер для картинки товара */
+        .product-img { width: 140px; height: 140px; margin: 30px auto; display: flex; justify-content: center; align-items: center; }
+        .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        
+        .product-name { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
         .product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
-        .product-price { font-size: 16px; font-weight: 700; color: var(--text-muted); }
-        .product-price strong { font-size: 20px; color: var(--text-main); margin-right: 4px; }
-        .buy-btn { background: var(--accent); color: #fff; padding: 10px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; transition: 0.2s; }
+        .product-price { font-size: 15px; font-weight: 700; color: var(--text-muted); }
+        .product-price strong { font-size: 22px; color: var(--text-main); margin-right: 2px; }
+        .buy-btn { background: var(--accent); color: #fff; padding: 12px 20px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 800; display: flex; align-items: center; gap: 8px; transition: 0.2s; }
         .buy-btn:hover { background: var(--accent-hover); }
+        .buy-btn svg { width: 14px; height: 14px; fill: currentColor; }
 
         /* RULES PAGE */
-        .rules-layout { display: grid; grid-template-columns: 1fr 2fr; gap: 60px; margin-top: 40px; }
-        .rules-side h1 { font-size: 36px; font-weight: 900; margin-bottom: 15px; }
-        .rules-side p { color: var(--text-muted); font-size: 15px; line-height: 1.6; }
-        .accordion-item { background: var(--bg-card); border-radius: var(--radius-sm); margin-bottom: 15px; border: 1px solid var(--border-color); overflow: hidden; }
+        .rules-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 60px; margin-top: 40px; }
+        .rules-side h1 { font-size: 40px; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; line-height: 1.1; }
+        .rules-side p { color: var(--text-muted); font-size: 15px; line-height: 1.6; max-width: 300px; }
+        .accordion-item { background: var(--bg-panel); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; }
         .accordion-header { width: 100%; padding: 24px; background: transparent; color: var(--text-main); font-size: 16px; font-weight: 700; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
-        .accordion-header:hover { background: rgba(255,255,255,0.02); }
-        .accordion-icon { width: 24px; height: 24px; background: var(--bg-main); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 12px; transition: transform 0.3s; border: 1px solid var(--border-color); }
-        .accordion-item.active .accordion-icon { transform: rotate(180deg); border-color: var(--accent); color: var(--accent); }
+        .accordion-header:hover { background: var(--bg-card); }
+        .accordion-icon { width: 28px; height: 28px; background: var(--bg-main); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; transition: transform 0.3s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
         .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 24px; color: var(--text-muted); font-size: 14px; line-height: 1.8; }
         .accordion-item.active .accordion-content { padding-bottom: 24px; }
-        .accordion-content span { color: var(--accent); font-weight: 700; margin-right: 5px; }
+        .accordion-content span { color: var(--accent); font-weight: 700; margin-right: 6px; }
 
         /* BANLIST PAGE */
         .banlist-header { margin-bottom: 30px; }
-        .banlist-header h1 { font-size: 36px; font-weight: 900; margin-bottom: 10px; }
+        .banlist-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
         .banlist-header p { color: var(--text-muted); font-size: 15px; }
-        .banlist-controls { display: flex; gap: 20px; margin-bottom: 20px; background: var(--bg-panel); padding: 15px; border-radius: var(--radius-sm); align-items: center; }
-        .ban-tabs { display: flex; gap: 5px; background: var(--bg-main); padding: 5px; border-radius: var(--radius-sm); }
-        .ban-tab { background: transparent; color: var(--text-muted); padding: 10px 20px; border-radius: 6px; font-weight: 700; font-size: 14px; transition: 0.2s; }
+        .banlist-controls { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .ban-tabs { display: flex; gap: 5px; background: var(--bg-panel); padding: 5px; border-radius: var(--radius-md); }
+        .ban-tab { background: transparent; color: var(--text-muted); padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; transition: 0.2s; }
         .ban-tab.active { background: var(--bg-card); color: var(--text-main); }
-        .search-input { flex: 1; background: var(--bg-main); border: 1px solid var(--border-color); padding: 12px 20px; border-radius: var(--radius-sm); color: var(--text-main); font-size: 14px; outline: none; }
+        .search-wrap { flex: 1; position: relative; }
+        .search-input { width: 100%; background: var(--bg-panel); border: 1px solid transparent; padding: 14px 20px 14px 45px; border-radius: var(--radius-md); color: var(--text-main); font-size: 14px; outline: none; transition: 0.2s; }
         .search-input:focus { border-color: var(--accent); }
-        .table-wrap { background: var(--bg-panel); border-radius: var(--radius-sm); overflow: hidden; }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--text-muted); }
+        .table-wrap { background: var(--bg-panel); border-radius: var(--radius-md); overflow: hidden; }
         .ban-table { width: 100%; border-collapse: collapse; text-align: left; }
-        .ban-table th { padding: 20px; font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border-color); }
+        .ban-table th { padding: 20px; font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border-color); letter-spacing: 0.5px; }
         .ban-table td { padding: 20px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
         .ban-table tr:last-child td { border-bottom: none; }
         .ban-table tr:hover { background: var(--bg-card); }
-        .player-cell { display: flex; align-items: center; gap: 15px; font-weight: 700; }
-        .player-avatar { width: 40px; height: 40px; background: #333; border-radius: 8px; object-fit: cover; }
-        .status-badge { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; }
-        .status-active { background: rgba(254, 44, 85, 0.15); color: var(--accent); }
-        .status-expired { background: rgba(168, 162, 154, 0.15); color: var(--text-muted); }
+        .player-cell { display: flex; align-items: center; gap: 15px; font-weight: 800; }
+        .player-avatar { width: 36px; height: 36px; background: #333; border-radius: 6px; object-fit: cover; }
+        .status-badge { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; }
+        .status-active { background: rgba(254, 44, 85, 0.1); color: var(--accent); }
+        .status-expired { background: rgba(168, 162, 154, 0.1); color: var(--text-muted); }
 
         /* CONTACTS PAGE */
         .contacts-header { margin-bottom: 40px; }
-        .contacts-header h1 { font-size: 36px; font-weight: 900; margin-bottom: 10px; }
+        .contacts-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
         .contacts-header p { color: var(--text-muted); font-size: 15px; }
-        .contacts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
-        .contact-card { background: var(--bg-panel); border-radius: var(--border-radius); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; position: relative; overflow: hidden; transition: 0.3s; border: 1px solid var(--border-color); }
-        .contact-card:hover { transform: translateY(-5px); border-color: var(--accent); }
-        .contact-card h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; z-index: 2; }
+        .contacts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .contact-card { background: var(--bg-panel); border-radius: var(--radius-lg); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; position: relative; overflow: hidden; transition: 0.3s; }
+        .contact-card:hover { transform: translateY(-5px); background: var(--bg-card); }
+        .contact-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 12px; z-index: 2; line-height: 1.2; }
         .contact-card p { color: var(--text-muted); font-size: 14px; line-height: 1.5; z-index: 2; max-width: 80%; }
-        .contact-icon { position: absolute; right: -20px; bottom: -20px; font-size: 120px; opacity: 0.1; transform: rotate(-15deg); z-index: 1; }
-        .contact-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; transition: 0.2s; }
-        .contact-card:hover .contact-arrow { background: var(--accent); }
+        .contact-icon { position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.1; transform: rotate(-10deg); z-index: 1; }
+        .contact-arrow { width: 40px; height: 40px; border-radius: 50%; background: var(--bg-main); display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; transition: 0.2s; }
+        .contact-card:hover .contact-arrow { background: var(--accent); color: #fff; }
 
         /* HOW TO JOIN PAGE */
         .join-header { margin-bottom: 40px; }
-        .join-header h1 { font-size: 36px; font-weight: 900; margin-bottom: 10px; }
+        .join-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
         .join-header p { color: var(--text-muted); font-size: 15px; }
-        .edition-toggle { display: flex; background: var(--bg-panel); padding: 6px; border-radius: var(--radius-sm); margin-bottom: 40px; max-width: 600px; border: 1px solid var(--border-color); }
-        .edition-btn { flex: 1; padding: 15px; text-align: center; border-radius: 6px; font-weight: 700; color: var(--text-muted); transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
-        .edition-btn.active { background: var(--bg-card); color: var(--text-main); box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .edition-toggle { display: flex; background: var(--bg-panel); padding: 6px; border-radius: var(--radius-md); margin-bottom: 40px; max-width: 600px; }
+        .edition-btn { flex: 1; padding: 16px; text-align: center; border-radius: var(--radius-sm); font-weight: 800; color: var(--text-muted); transition: 0.2s; display: flex; flex-direction: column; gap: 4px; }
+        .edition-btn.active { background: var(--bg-card); color: var(--text-main); }
         .edition-btn span { font-size: 12px; font-weight: 500; color: var(--text-muted); }
-        .step-block { background: var(--bg-panel); border-radius: var(--border-radius); padding: 30px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; border: 1px solid var(--border-color); }
-        .step-info h3 { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
-        .step-info p { color: var(--text-muted); font-size: 14px; line-height: 1.6; margin-bottom: 20px; }
-        .step-img { background: var(--bg-main); border-radius: var(--radius-sm); display: flex; justify-content: center; align-items: center; min-height: 200px; border: 1px solid var(--border-color); color: var(--text-muted); }
-        .ip-copy-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg-card); padding: 10px 10px 10px 20px; border-radius: var(--radius-sm); margin-top: 15px; border: 1px solid var(--border-color); }
-        .ip-copy-box span { font-weight: 700; font-size: 16px; }
-        .btn-copy { background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 6px; font-weight: 700; font-size: 14px; transition: 0.2s; }
+        .step-block { background: var(--bg-panel); border-radius: var(--radius-lg); padding: 40px; margin-bottom: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .step-info h3 { font-size: 24px; font-weight: 800; margin-bottom: 15px; }
+        .step-info p { color: var(--text-muted); font-size: 15px; line-height: 1.6; margin-bottom: 25px; }
+        .step-img { background: var(--bg-main); border-radius: var(--radius-md); display: flex; justify-content: center; align-items: center; min-height: 220px; color: var(--text-muted); font-size: 14px; }
+        .ip-copy-box { display: flex; justify-content: space-between; align-items: center; background: var(--bg-main); padding: 10px 10px 10px 20px; border-radius: var(--radius-md); margin-top: 15px; }
+        .ip-copy-box span { font-weight: 800; font-size: 18px; letter-spacing: 0.5px; }
+        .btn-copy { background: var(--accent); color: #fff; padding: 12px 24px; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; transition: 0.2s; }
         .btn-copy:hover { background: var(--accent-hover); }
 
         /* FOOTER */
-        .footer { background: var(--bg-panel); padding: 60px 0 30px; border-top: 1px solid var(--border-color); margin-top: auto; }
+        .footer { padding: 60px 0 30px; margin-top: auto; }
         .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 40px; margin-bottom: 40px; }
-        .footer-logo { font-size: 24px; font-weight: 900; margin-bottom: 15px; }
-        .footer-logo span { color: var(--accent); }
+        .footer-logo { font-size: 24px; font-weight: 900; margin-bottom: 15px; display: flex; align-items: center; }
+        .footer-logo span:first-child { background: var(--accent); padding: 2px 6px; border-radius: 4px; margin-right: 4px; color: #fff; font-size: 20px; }
         .footer-desc { color: var(--text-muted); font-size: 13px; line-height: 1.6; max-width: 300px; }
-        .footer-col h4 { font-size: 14px; font-weight: 700; margin-bottom: 20px; text-transform: uppercase; }
+        .footer-col h4 { font-size: 13px; font-weight: 800; margin-bottom: 20px; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.5px; }
         .footer-col ul li { margin-bottom: 12px; }
-        .footer-col ul li a { color: var(--text-muted); font-size: 14px; transition: 0.2s; }
+        .footer-col ul li a { color: var(--text-main); font-size: 14px; font-weight: 600; transition: 0.2s; }
         .footer-col ul li a:hover { color: var(--accent); }
-        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: 13px; }
+        .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 30px; color: var(--text-muted); font-size: 13px; }
         .payments { display: flex; gap: 15px; align-items: center; }
+        .payments span { font-weight: 800; color: var(--text-muted); font-style: italic; font-size: 16px; }
 
         /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(5px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
-        .modal-content { background: var(--bg-panel); border-radius: var(--border-radius); width: 100%; max-width: 450px; padding: 30px; position: relative; border: 1px solid var(--border-color); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .modal-close { position: absolute; top: 20px; right: 20px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.2s; }
-        .modal-close:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
-        .modal-title { font-size: 22px; font-weight: 800; margin-bottom: 25px; }
+        .modal-content { background: var(--bg-panel); border-radius: var(--radius-lg); width: 100%; max-width: 440px; padding: 40px; position: relative; }
+        .modal-close { position: absolute; top: 20px; right: 20px; background: transparent; color: var(--text-muted); font-size: 24px; transition: 0.2s; }
+        .modal-close:hover { color: #fff; }
+        .modal-title { font-size: 24px; font-weight: 900; margin-bottom: 30px; line-height: 1.2; }
         .modal-title span { color: var(--accent); }
         .input-group { margin-bottom: 15px; }
-        .input-field { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); padding: 15px; font-size: 15px; border-radius: var(--radius-sm); outline: none; transition: 0.2s; }
+        .input-field { width: 100%; background: var(--bg-main); border: 1px solid var(--border-color); color: var(--text-main); padding: 16px; font-size: 15px; border-radius: var(--radius-md); outline: none; transition: 0.2s; font-weight: 600; }
         .input-field:focus { border-color: var(--accent); }
-        .modal-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; }
-        .modal-price { font-size: 14px; color: var(--text-muted); }
-        .modal-price span { display: block; font-size: 24px; font-weight: 800; color: var(--text-main); margin-top: 5px; }
-        .btn-submit { background: var(--accent); color: #fff; padding: 15px 30px; border-radius: var(--radius-sm); font-size: 16px; font-weight: 700; transition: 0.2s; flex: 1; margin-left: 20px; }
+        .modal-footer { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 30px; }
+        .modal-price { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+        .modal-price span { display: block; font-size: 28px; font-weight: 900; color: var(--text-main); margin-top: 4px; }
+        .btn-submit { background: var(--accent); color: #fff; padding: 16px 30px; border-radius: var(--radius-md); font-size: 16px; font-weight: 800; transition: 0.2s; flex: 1; margin-left: 20px; }
         .btn-submit:hover { background: var(--accent-hover); }
         .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
 
+        @media (max-width: 1200px) {
+            .products-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 1024px) {
             .hero-banners { grid-template-columns: 1fr; }
-            .hero-main { min-height: 220px; }
             .shop-layout { grid-template-columns: 1fr; }
-            .sidebar { flex-direction: row; overflow-x: auto; padding-bottom: 10px; }
+            .sidebar { flex-direction: row; overflow-x: auto; padding-bottom: 10px; gap: 15px; }
+            .sidebar > div { display: flex; gap: 10px; }
             .sidebar-title { display: none; }
-            .mode-btn { min-width: 200px; }
-            .rules-layout { grid-template-columns: 1fr; }
+            .mode-btn { min-width: 180px; margin-bottom: 0; }
+            .cat-btn { min-width: 150px; margin-bottom: 0; justify-content: center; }
+            .rules-layout { grid-template-columns: 1fr; gap: 30px; }
+            .contacts-grid { grid-template-columns: 1fr 1fr; }
+            .step-block { grid-template-columns: 1fr; padding: 30px; }
             .footer-top { grid-template-columns: 1fr 1fr; }
-            .contacts-grid { grid-template-columns: 1fr; }
-            .step-block { grid-template-columns: 1fr; }
+            .nav { display: none; }
         }
 
         @media (max-width: 768px) {
             .header-inner { flex-direction: column; gap: 15px; }
-            .nav { width: 100%; overflow-x: auto; justify-content: flex-start; }
-            .nav a { white-space: nowrap; }
-            .hero-title { font-size: 24px; max-width: 100%; }
-            .hero-text { max-width: 100%; }
-            .hero-img { opacity: 0.3; }
-            .banlist-controls { flex-direction: column; align-items: stretch; }
-            .ban-tabs { overflow-x: auto; }
+            .products-grid { grid-template-columns: 1fr; }
             .ban-table th, .ban-table td { padding: 15px 10px; font-size: 13px; }
+            .contacts-grid { grid-template-columns: 1fr; }
             .footer-top { grid-template-columns: 1fr; }
             .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
-            .modal-footer { flex-direction: column; gap: 15px; align-items: stretch; }
+            .modal-footer { flex-direction: column; gap: 20px; align-items: stretch; }
             .btn-submit { margin-left: 0; }
         }
     </style>
@@ -221,15 +243,30 @@
     <header class="header">
         <div class="container header-inner">
             <div class="logo-area">
-                <a href="#" class="logo" onclick="switchPage('shop')"><span>Spa</span>Grief</a>
-                <div class="online-badge">ОНЛАЙН: 728</div>
+                <a href="#" class="logo" onclick="switchPage('shop')">
+                    <span>Spa</span><span>Grief</span>
+                </a>
+                <div class="online-badge">
+                    <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+                    ОНЛАЙН: <span id="online-count">...</span>
+                </div>
             </div>
             <nav class="nav">
-                <a href="#" class="active" data-page="shop" onclick="switchPage('shop')">ГЛАВНАЯ</a>
-                <a href="#" data-page="rules" onclick="switchPage('rules')">ПРАВИЛА</a>
-                <a href="#" data-page="banlist" onclick="switchPage('banlist')">БАН-ЛИСТ</a>
-                <a href="#" data-page="contacts" onclick="switchPage('contacts')">КОНТАКТЫ</a>
-                <a href="#" data-page="join" onclick="switchPage('join')">КАК ЗАЙТИ?</a>
+                <a href="#" class="active" data-page="shop" onclick="switchPage('shop')">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> ГЛАВНАЯ
+                </a>
+                <a href="#" data-page="rules" onclick="switchPage('rules')">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> ПРАВИЛА
+                </a>
+                <a href="#" data-page="banlist" onclick="switchPage('banlist')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg> БАН-ЛИСТ
+                </a>
+                <a href="#" data-page="contacts" onclick="switchPage('contacts')">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg> КОНТАКТЫ
+                </a>
+                <a href="#" data-page="join" onclick="switchPage('join')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> КАК ЗАЙТИ?
+                </a>
             </nav>
         </div>
     </header>
@@ -240,11 +277,15 @@
         <section id="page-shop" class="page active">
             <div class="hero-banners">
                 <div class="hero-banner hero-main">
+                    <div class="hero-img-placeholder"></div>
                     <h2 class="hero-title">Покупайте привилегии с доплатой</h2>
                     <p class="hero-text">Оплачивайте только разницу в стоимости привилегий</p>
+                    <div class="hero-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div>
                 </div>
                 <div class="hero-banner hero-side">
+                    <div class="hero-img-placeholder"></div>
                     <h2 class="hero-title">Наборами выгоднее</h2>
+                    <div class="hero-arrow"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></div>
                 </div>
             </div>
 
@@ -253,30 +294,38 @@
                     <div>
                         <div class="sidebar-title">Выберите режим</div>
                         <button class="mode-btn active">
-                            <div style="font-size:24px;">🛡️</div>
+                            <div class="mode-icon">🛡️</div>
                             <span>АНАРХИЯ</span>
                         </button>
                         <button class="mode-btn">
-                            <div style="font-size:24px;">⛏️</div>
+                            <div class="mode-icon">⛏️</div>
                             <span>ГРИФЕРСКИЙ</span>
                         </button>
                     </div>
                     <div>
                         <div class="sidebar-title">Категории</div>
-                        <button class="cat-btn active">👑 ПРИВИЛЕГИИ</button>
-                        <button class="cat-btn">💎 ВАЛЮТЫ</button>
-                        <button class="cat-btn">🎁 СУНДУКИ</button>
-                        <button class="cat-btn">📦 ДРУГОЕ</button>
+                        <button class="cat-btn active" onclick="filterCategory('privileges', this)">
+                            <svg viewBox="0 0 24 24"><path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z"/></svg> ПРИВИЛЕГИИ
+                        </button>
+                        <button class="cat-btn" onclick="filterCategory('currency', this)">
+                            <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg> ВАЛЮТЫ
+                        </button>
+                        <button class="cat-btn" onclick="filterCategory('chests', this)">
+                            <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2v3h2v-3h12v3h2v-3h2v-5h-2v-4zM8 18H4v-4h4v4zm0-6H4V8h4v4zm6 6h-4v-4h4v4zm0-6h-4V8h4v4zm6 6h-4v-4h4v4zm0-6h-4V8h4v4z"/></svg> СУНДУКИ
+                        </button>
+                        <button class="cat-btn" onclick="filterCategory('other', this)">
+                            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg> ДРУГОЕ
+                        </button>
                     </div>
                 </div>
 
                 <div class="main-content">
                     <div class="content-header">
-                        <h1 class="content-title">Привилегии</h1>
+                        <h1 class="content-title" id="current-category-title">Привилегии</h1>
                         <button class="compare-btn">Сравнить привилегии</button>
                     </div>
                     <div class="products-grid" id="product-grid">
-                        <!-- Products injected via JS -->
+                        <!-- Товары рендерятся через JS -->
                     </div>
                 </div>
             </div>
@@ -363,7 +412,10 @@
                     <button class="ban-tab">МУТЫ</button>
                     <button class="ban-tab">ПРЕДУПРЕЖДЕНИЯ</button>
                 </div>
-                <input type="text" class="search-input" placeholder="Ник игрока или модератора...">
+                <div class="search-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" class="search-input" placeholder="Ник игрока или модератора...">
+                </div>
             </div>
             <div class="table-wrap">
                 <table class="ban-table">
@@ -377,44 +429,30 @@
                         </tr>
                     </thead>
                     <tbody id="banlist-body">
-                        <!-- Mock Data -->
+                        <!-- Mock Data (Замените на реальные данные из API) -->
                         <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/MrTyOne/40.png" class="player-avatar"> MrTyOne</div></td>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/MrTyOne/36.png" class="player-avatar"> MrTyOne</div></td>
                             <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
                             <td>SpaAC</td>
                             <td>14 минут назад</td>
                             <td><span class="status-badge status-active">ещё 13 д</span></td>
                         </tr>
                         <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/flow1488/40.png" class="player-avatar"> flow1488</div></td>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/flow1488/36.png" class="player-avatar"> flow1488</div></td>
                             <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
                             <td>SpaAC</td>
                             <td>26 минут назад</td>
                             <td><span class="status-badge status-active">ещё 13 д</span></td>
                         </tr>
                         <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/mussof/40.png" class="player-avatar"> mussof</div></td>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/mussof/36.png" class="player-avatar"> mussof</div></td>
                             <td>Пункт 4.2</td>
                             <td>artyomika</td>
                             <td>50 минут назад</td>
                             <td><span class="status-badge status-active">ещё 92 д</span></td>
                         </tr>
                         <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/The_orbovkyyl/40.png" class="player-avatar"> The_orbovkyyl</div></td>
-                            <td>Пункт 4.2</td>
-                            <td>artyomika</td>
-                            <td>54 минуты назад</td>
-                            <td><span class="status-badge status-active">ещё 92 д</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/BlazeRUSH/40.png" class="player-avatar"> BlazeRUSH</div></td>
-                            <td>Пункт 4.2 (Использование запрещённого ПО)</td>
-                            <td>SpaAC</td>
-                            <td>56 минут назад</td>
-                            <td><span class="status-badge status-active">ещё 13 д</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/Rix_2006/40.png" class="player-avatar"> Rix_2006</div></td>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/Rix_2006/36.png" class="player-avatar"> Rix_2006</div></td>
                             <td>Пункт 4.2 (Использование запрещённого ПО)</td>
                             <td>SpaAC</td>
                             <td>58 минут назад</td>
@@ -436,19 +474,19 @@
                     <h3>Обратиться в тех. поддержку</h3>
                     <p>Возникли проблемы? Напишите в бот — разберёмся и поможем</p>
                     <div class="contact-icon">🛠️</div>
-                    <a href="https://t.me/SpaGriefHelpBot" target="_blank" class="contact-arrow">→</a>
+                    <a href="https://t.me/SpaGriefHelpBot" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
                 </div>
                 <div class="contact-card">
                     <h3>Вступай в наш Discord сервер</h3>
                     <p>Общайся с другими игроками</p>
                     <div class="contact-icon">💬</div>
-                    <a href="https://discord.gg/mXtbmPW7VQ" target="_blank" class="contact-arrow">→</a>
+                    <a href="https://discord.gg/mXtbmPW7VQ" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
                 </div>
                 <div class="contact-card">
-                    <h3>Подпишись на наш Telegram-канал</h3>
+                    <h3>Подпишись на Telegram-канал</h3>
                     <p>Узнавай обо всех новостях первым</p>
                     <div class="contact-icon">✈️</div>
-                    <a href="https://t.me/spagrief" target="_blank" class="contact-arrow">→</a>
+                    <a href="https://t.me/spagrief" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
                 </div>
             </div>
         </section>
@@ -481,7 +519,7 @@
                     </div>
                 </div>
                 <div class="step-img">
-                    <span style="opacity:0.5">Скриншот добавления сервера</span>
+                    Скриншот добавления сервера
                 </div>
             </div>
 
@@ -491,7 +529,7 @@
                     <p>Выбери SpaGrief в списке серверов и нажми «Подключиться».</p>
                 </div>
                 <div class="step-img">
-                    <span style="opacity:0.5">Скриншот подключения</span>
+                    Скриншот подключения
                 </div>
             </div>
         </section>
@@ -502,7 +540,7 @@
         <div class="container">
             <div class="footer-top">
                 <div>
-                    <div class="footer-logo"><span>Spa</span>Grief</div>
+                    <div class="footer-logo"><span>Spa</span><span>Grief</span></div>
                     <p class="footer-desc">Проект SpaGrief — независимый игровой сервер Minecraft и не связан с Mojang Studios или Microsoft.<br><br>ИП Литвинчук Николай Николаевич<br>ИНН 644940989449, ОГРНИП 322645700028254</p>
                 </div>
                 <div class="footer-col">
@@ -524,9 +562,9 @@
                 <div class="footer-col">
                     <h4>Оплата</h4>
                     <div class="payments">
-                        <span style="font-weight:700;color:#fff;">VISA</span>
-                        <span style="font-weight:700;color:#fff;">МИР</span>
-                        <span style="font-weight:700;color:#fff;">СБП</span>
+                        <span>VISA</span>
+                        <span>МИР</span>
+                        <span>СБП</span>
                     </div>
                 </div>
             </div>
@@ -551,48 +589,131 @@
             </div>
 
             <div class="modal-footer">
-                <div class="modal-price">Стоимость: <span id="modal-price-val">0 ₽</span></div>
+                <div class="modal-price">К оплате: <span id="modal-price-val">0 ₽</span></div>
                 <button class="btn-submit" id="btn-submit" onclick="processPayment()">ОПЛАТИТЬ</button>
             </div>
         </div>
     </div>
 
     <script>
-        const PROXY_URL = "https://spagrief-easydonate.aquadark5647.workers.dev";
-        const SERVER_ID = 143248;
+        // ==========================================
+        // 1. API ДЛЯ РЕАЛЬНОГО ОНЛАЙНА
+        // ==========================================
+        async function fetchOnline() {
+            try {
+                // Пинг сервера через публичный API mcsrvstat.us
+                const res = await fetch('https://api.mcsrvstat.us/3/mc.spagrief.fun');
+                const data = await res.json();
+                if (data.online && data.players) {
+                    document.getElementById('online-count').innerText = data.players.online;
+                } else {
+                    document.getElementById('online-count').innerText = '0';
+                }
+            } catch (e) {
+                console.warn("Не удалось получить онлайн", e);
+                document.getElementById('online-count').innerText = '?';
+            }
+        }
+        setInterval(fetchOnline, 60000); // Обновляем раз в минуту
+        fetchOnline();
 
+        // ==========================================
+        // 2. ДАННЫЕ ТОВАРОВ И КАТЕГОРИИ
+        // ==========================================
+        // ВАЖНО: Замените id (1001, 1002...) на реальные ID из панели EasyDonate!
         const products = [
-            { id: 1001, name: "Элита", price: 89, tk: "+13.000 ТК", icon: "🟣" },
-            { id: 1002, name: "Титан", price: 229, tk: "+25.000 ТК", icon: "🔴" },
-            { id: 1003, name: "Принц", price: 399, tk: "+35.000 ТК", icon: "🟡" },
-            { id: 1004, name: "Князь", price: 699, tk: "+48.000 ТК", icon: "🔵", hot: true },
-            { id: 1005, name: "Герцог", price: 1099, tk: "+75.000 ТК", icon: "🟣", hot: true },
-            { id: 1006, name: "Аристократ", price: 1799, tk: "+180.000 ТК", icon: "🦅", hot: true }
+            // --- ПРИВИЛЕГИИ ---
+            { id: 1001, category: "privileges", name: "Элита", price: 89, tk: "+13.000 ТК", icon: "https://minotar.net/armor/body/Notch/100.png" }, // Заглушка картинки
+            { id: 1002, category: "privileges", name: "Титан", price: 229, tk: "+25.000 ТК", icon: "https://minotar.net/armor/body/Notch/100.png" },
+            { id: 1003, category: "privileges", name: "Принц", price: 399, tk: "+35.000 ТК", icon: "https://minotar.net/armor/body/Notch/100.png" },
+            { id: 1004, category: "privileges", name: "Князь", price: 699, tk: "+48.000 ТК", icon: "https://minotar.net/armor/body/Notch/100.png", hot: true },
+            
+            // --- ВАЛЮТЫ ---
+            { id: 2001, category: "currency", name: "10,000 Токенов", price: 150, tk: "", icon: "https://minotar.net/helm/Gold_Block/100.png" },
+            { id: 2002, category: "currency", name: "50,000 Токенов", price: 700, tk: "", icon: "https://minotar.net/helm/Gold_Block/100.png" },
+            
+            // --- СУНДУКИ (Кейсы) ---
+            { id: 3001, category: "chests", name: "Кейс «ПРЕМИУМ»", price: 289, tk: "", icon: "https://minotar.net/helm/Chest/100.png", hot: true },
+            { id: 3002, category: "chests", name: "Кейс «СУПРИМ»", price: 489, tk: "", icon: "https://minotar.net/helm/Ender_Chest/100.png", hot: true },
+            { id: 3003, category: "chests", name: "Сундук с талисманами", price: 89, tk: "", icon: "https://minotar.net/helm/Trapped_Chest/100.png", hot: true },
+            { id: 3004, category: "chests", name: "Сундук с токенами", price: 89, tk: "", icon: "https://minotar.net/helm/Chest/100.png", hot: true },
+            
+            // --- ДРУГОЕ ---
+            { id: 4001, category: "other", name: "Размут", price: 49, tk: "", icon: "https://minotar.net/helm/Paper/100.png" },
+            { id: 4002, category: "other", name: "Разбан", price: 249, tk: "", icon: "https://minotar.net/helm/Barrier/100.png" }
         ];
 
         let currentProduct = null;
+        let activeCategory = "privileges";
 
-        function renderProducts() {
+        // ==========================================
+        // 3. ЛОГИКА РЕНДЕРА И ФИЛЬТРАЦИИ
+        // ==========================================
+        function renderProducts(category) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = products.map(p => `
+            const filtered = products.filter(p => p.category === category);
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div style="color:var(--text-muted); grid-column: 1/-1; text-align: center; padding: 50px;">В этой категории пока нет товаров.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
                 <div class="product-card">
-                    ${p.tk ? `<div class="product-badge ${p.hot ? 'hot' : ''}">${p.hot ? '🔥 ' : ''}${p.tk}</div>` : ''}
-                    <div class="product-img" style="font-size: 60px; text-shadow: 0 0 20px rgba(254,44,85,0.5);">${p.icon}</div>
+                    <div class="product-badges">
+                        ${p.hot ? `<div class="badge-hot">🔥 Хит продаж</div>` : `<div></div>`}
+                        ${p.tk ? `<div class="badge-tk">${p.tk}</div>` : ``}
+                    </div>
+                    <div class="product-img">
+                        <img src="${p.icon}" alt="${p.name}">
+                    </div>
                     <div class="product-name">${p.name}</div>
                     <div class="product-footer">
                         <div class="product-price">от <strong>${p.price}</strong> ₽</div>
-                        <button class="buy-btn" onclick="openModal(${p.id})">Купить <span>›</span></button>
+                        <button class="buy-btn" onclick="openModal(${p.id})">Купить <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
                     </div>
                 </div>
             `).join('');
         }
 
+        function filterCategory(category, btnElement) {
+            activeCategory = category;
+            
+            // Смена активной кнопки
+            document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            // Смена заголовка
+            const titles = {
+                "privileges": "Привилегии",
+                "currency": "Валюты",
+                "chests": "Сундуки",
+                "other": "Другое"
+            };
+            document.getElementById('current-category-title').innerText = titles[category];
+            
+            // Скрываем кнопку сравнения, если это не привилегии
+            const compareBtn = document.querySelector('.compare-btn');
+            if(category === "privileges") {
+                compareBtn.style.display = "block";
+            } else {
+                compareBtn.style.display = "none";
+            }
+
+            renderProducts(category);
+        }
+
+        // ==========================================
+        // 4. НАВИГАЦИЯ И UI
+        // ==========================================
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
             
             document.getElementById(`page-${pageId}`).classList.add('active');
-            document.querySelector(`.nav a[data-page="${pageId}"]`).classList.add('active');
+            const navLink = document.querySelector(`.nav a[data-page="${pageId}"]`);
+            if (navLink) navLink.classList.add('active');
+            
             window.scrollTo(0, 0);
         }
 
@@ -621,6 +742,12 @@
                 }, 2000);
             });
         }
+
+        // ==========================================
+        // 5. ОПЛАТА (EasyDonate)
+        // ==========================================
+        const PROXY_URL = "https://spagrief-easydonate.aquadark5647.workers.dev";
+        const SERVER_ID = 143248;
 
         function openModal(productId) {
             currentProduct = products.find(p => p.id === productId);
@@ -693,7 +820,8 @@
             }
         }
 
-        renderProducts();
+        // Инициализация
+        renderProducts(activeCategory);
     </script>
 </body>
 </html>
