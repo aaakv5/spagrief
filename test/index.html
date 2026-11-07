@@ -344,11 +344,14 @@
                         <button class="cat-btn" onclick="filterCategory('chests', this)">
                             <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2v3h2v-3h12v3h2v-3h2v-5h-2v-4zM8 18H4v-4h4v4zm0-6H4V8h4v4zm6 6h-4v-4h4v4zm0-6h-4V8h4v4zm6 6h-4v-4h4v4zm0-6h-4V8h4v4z"/></svg> СУНДУКИ
                         </button>
+                        <button class="cat-btn" onclick="filterCategory('other', this)">
+                            <svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg> ДРУГОЕ
+                        </button>
                     </div>
                 </div>
 
                 <div class="main-content">
-                    <!-- GRID VIEW FOR PRIVILEGES/CHESTS -->
+                    <!-- GRID VIEW FOR PRIVILEGES/CHESTS/OTHER -->
                     <div id="grid-view">
                         <div class="content-header">
                             <h1 class="content-title" id="current-category-title">Привилегии</h1>
@@ -678,7 +681,7 @@
                     <button class="btn-apply">Применить</button>
                 </div>
 
-                <label class="input-label">ПЕРИОД</label>
+                <label class="input-label" id="period-label">ПЕРИОД</label>
                 <div class="period-selector" id="period-selector">
                     <button class="period-btn active" data-period="30" onclick="setPeriod('30', this)">
                         <span>30 дней</span>
@@ -726,8 +729,8 @@
         setInterval(fetchOnline, 60000);
         fetchOnline();
 
-        // Data with updated prices and badges
-        const ranks = [
+        // Data
+        const privileges = [
             { id: 1, name: "Барон", img: "https://minotar.net/armor/body/Notch/100.png", p30: 49, p90: 89, pForever: 139, badge: "", hot: false, features: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон", "/time", "/weather", "/loom"] },
             { id: 2, name: "Страж", img: "https://minotar.net/armor/body/Notch/100.png", p30: 89, p90: 159, pForever: 249, badge: "", hot: false, features: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж", "/time", "/weather", "/loom"] },
             { id: 3, name: "Герой", img: "https://minotar.net/armor/body/Notch/100.png", p30: 139, p90: 249, pForever: 399, badge: "", hot: false, features: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой", "/time", "/weather", "/loom"] },
@@ -741,31 +744,58 @@
             { id: 11, name: "Герцог", img: "https://minotar.net/armor/body/Notch/100.png", p30: 2799, p90: 5199, pForever: 8399, badge: "+75.000 ТК", hot: true, features: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог", "/time", "/weather", "/loom"] }
         ];
 
+        const chests = [
+            { id: 201, name: "Кейс «ПРЕМИУМ»", img: "https://minotar.net/helm/Chest/100.png", price: 289, badge: "+13.000 ТК", hot: true, features: ["Содержит редкие предметы", "Шанс выпадения привилегии"] },
+            { id: 202, name: "Кейс «СУПРИМ»", img: "https://minotar.net/helm/Ender_Chest/100.png", price: 489, badge: "+25.000 ТК", hot: true, features: ["Содержит эпические предметы", "Гарантированная привилегия"] },
+            { id: 203, name: "Сундук с талисманами", img: "https://minotar.net/helm/Trapped_Chest/100.png", price: 89, badge: "+5.000 ТК", hot: true, features: ["Талисманы для баффов"] },
+            { id: 204, name: "Сундук с токенами", img: "https://minotar.net/helm/Chest/100.png", price: 89, badge: "+10.000 ТК", hot: true, features: ["Игровая валюта"] }
+        ];
+
+        const otherItems = [
+            { id: 301, name: "Размут", img: "https://minotar.net/helm/Paper/100.png", price: 49, features: ["Снимает блокировку чата"] },
+            { id: 302, name: "Разбан", img: "https://minotar.net/helm/Barrier/100.png", price: 249, features: ["Снимает блокировку аккаунта"] }
+        ];
+
         let currentProduct = null;
         let currentPeriod = '30';
         let currentPrice = 0;
-        let currentType = 'rank';
+        let currentType = 'privileges';
         let tokenAmountRub = 100;
 
-        // Render Products
-        function renderPrivileges() {
+        // Render Grid
+        function renderGrid(category) {
             const grid = document.getElementById('product-grid');
-            grid.innerHTML = ranks.map(r => `
+            let data = [];
+            
+            if (category === 'privileges') data = privileges;
+            else if (category === 'chests') data = chests;
+            else if (category === 'other') data = otherItems;
+            
+            if (data.length === 0) {
+                grid.innerHTML = `<p style="color:var(--text-muted)">В этой категории пока нет товаров.</p>`;
+                return;
+            }
+
+            grid.innerHTML = data.map(p => {
+                let priceDisplay = p.p30 ? `от <strong>${p.p30}</strong> РУБ` : `<strong>${p.price}</strong> РУБ`;
+                
+                return `
                 <div class="product-card">
                     <div class="product-badges">
-                        ${r.hot ? `<div class="badge-hot">🔥 Хит продаж</div>` : `<div></div>`}
-                        ${r.badge ? `<div class="badge-tk">${r.badge}</div>` : ``}
+                        ${p.hot ? `<div class="badge-hot">🔥 Хит продаж</div>` : `<div></div>`}
+                        ${p.badge ? `<div class="badge-tk">${p.badge}</div>` : ``}
                     </div>
                     <div class="product-img">
-                        <img src="${r.img}" alt="${r.name}">
+                        <img src="${p.img}" alt="${p.name}">
                     </div>
-                    <div class="product-name">${r.name}</div>
+                    <div class="product-name">${p.name}</div>
                     <div class="product-footer">
-                        <div class="product-price">от <strong>${r.p30}</strong> РУБ</div>
-                        <button class="buy-btn" onclick="openRankModal(${r.id})">Купить <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
+                        <div class="product-price">${priceDisplay}</div>
+                        <button class="buy-btn" onclick="openProductModal(${p.id}, '${category}')">Купить <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
                     </div>
                 </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function filterCategory(category, btnElement) {
@@ -781,9 +811,10 @@
             } else {
                 gridView.style.display = 'block';
                 currencyView.style.display = 'none';
-                document.getElementById('current-category-title').innerText = category === 'privileges' ? 'Привилегии' : 'Товары';
-                if (category === 'privileges') renderPrivileges();
-                else document.getElementById('product-grid').innerHTML = '<p style="color:var(--text-muted)">В этой категории пока нет товаров.</p>';
+                
+                const titles = { 'privileges': 'Привилегии', 'chests': 'Сундуки', 'other': 'Другое' };
+                document.getElementById('current-category-title').innerText = titles[category];
+                renderGrid(category);
             }
         }
 
@@ -805,27 +836,39 @@
         }
 
         // Modals
-        function openRankModal(id) {
-            currentProduct = ranks.find(r => r.id === id);
-            currentType = 'rank';
-            
-            document.getElementById('modal-item-img').src = currentProduct.img;
-            document.getElementById('modal-item-name').innerText = currentProduct.name;
-            
-            // Populate features
-            const list = document.getElementById('modal-features-list');
-            list.innerHTML = currentProduct.features.map((f, i) => `<li><span class="num">0${i+1}</span> <span>${f}</span></li>`).join('');
+        function openProductModal(id, category) {
+            let product;
+            if (category === 'privileges') product = privileges.find(p => p.id === id);
+            else if (category === 'chests') product = chests.find(p => p.id === id);
+            else product = otherItems.find(p => p.id === id);
 
-            // Set prices
-            document.getElementById('price-30').innerText = currentProduct.p30 + ' РУБ';
-            document.getElementById('price-90').innerText = currentProduct.p90 + ' РУБ';
-            document.getElementById('price-forever').innerText = currentProduct.pForever + ' РУБ';
+            if (!product) return;
 
-            // Reset form
+            currentProduct = product;
+            currentType = category;
+
+            document.getElementById('modal-item-img').src = product.img;
+            document.getElementById('modal-item-name').innerText = product.name;
+            document.getElementById('modal-features-list').innerHTML = product.features.map((f, i) => `<li><span class="num">0${i+1}</span> <span>${f}</span></li>`).join('');
+
+            // Настройка периодов для привилегий
+            if (category === 'privileges') {
+                document.getElementById('period-label').style.display = 'block';
+                document.getElementById('period-selector').style.display = 'flex';
+                document.getElementById('price-30').innerText = product.p30 + ' РУБ';
+                document.getElementById('price-90').innerText = product.p90 + ' РУБ';
+                document.getElementById('price-forever').innerText = product.pForever + ' РУБ';
+                setPeriod('30', document.querySelector('.period-btn[data-period="30"]'));
+            } else {
+                document.getElementById('period-label').style.display = 'none';
+                document.getElementById('period-selector').style.display = 'none';
+                currentPrice = product.price;
+                document.getElementById('modal-item-price').innerText = currentPrice + ' РУБ';
+                document.getElementById('modal-total-price').innerText = currentPrice + ' РУБ';
+            }
+
             document.getElementById('input-nick').value = "";
             document.getElementById('input-promo').value = "";
-            setPeriod('30', document.querySelector('.period-btn[data-period="30"]'));
-            
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
@@ -839,6 +882,7 @@
                 <li><span>Игровая валюта</span></li>
                 <li><span>Вы получите: ${(tokenAmountRub * 100).toLocaleString('ru-RU')} ТК</span></li>
             `;
+            document.getElementById('period-label').style.display = 'none';
             document.getElementById('period-selector').style.display = 'none';
             
             currentPrice = tokenAmountRub;
@@ -866,7 +910,6 @@
 
         function closeModal() {
             document.getElementById('payment-modal').style.display = 'none';
-            document.getElementById('period-selector').style.display = 'flex'; 
         }
 
         // Payment
@@ -886,11 +929,14 @@
             let edId = 0;
             if (currentType === 'tokens') {
                 edId = 2000; 
-            } else {
+            } else if (currentType === 'privileges') {
                 let base = currentProduct.id * 10;
                 if (currentPeriod === '30') edId = base + 1;
                 else if (currentPeriod === '90') edId = base + 2;
                 else edId = base + 3;
+            } else {
+                // Для сундуков и другого берем прямой ID (заглушка, замените на реальные ID)
+                edId = currentProduct.id;
             }
 
             const payload = {
@@ -963,7 +1009,7 @@
         }
 
         // Init
-        renderPrivileges();
+        renderGrid('privileges');
         updateTokenCalc(100);
     </script>
 </body>
