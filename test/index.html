@@ -50,7 +50,14 @@
         .page { display: none; padding: 30px 0; flex: 1; }
         .page.active { display: block; }
 
-        .hero-banners { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; margin-bottom: 40px; }
+        /* HERO BANNERS */
+        .hero-banners { 
+            display: grid; 
+            grid-template-columns: 1fr 350px; 
+            gap: 20px; 
+            margin-bottom: 40px; 
+            height: 350px; 
+        }
         .hero-banner { 
             border-radius: var(--radius-lg); 
             position: relative; 
@@ -58,7 +65,7 @@
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
-            min-height: 280px; 
+            height: 100%; 
         }
         
         .hero-main { 
@@ -75,29 +82,28 @@
             object-position: center;
             z-index: 1;
             display: block;
+            transform: scale(1.02);
         }
 
         .hero-side { 
-            background: linear-gradient(135deg, #4a1b6d 0%, #120d1c 100%); 
+            background: #120d1c; 
             padding: 40px;
         }
         .hero-side .hero-img { 
             position: absolute; 
-            right: 0; 
-            bottom: 0; 
-            width: 350px; 
-            height: 350px;
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-            object-position: right bottom;
+            top: 0;
+            left: 0;
+            width: 100%; 
+            height: 100%;
+            object-fit: cover;
             z-index: 1; 
-            pointer-events: none;
+            display: block;
+            transform: scale(1.02);
         }
         
-        .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; max-width: 60%; z-index: 2; letter-spacing: -0.5px; }
-        .hero-text { font-size: 15px; color: rgba(255,255,255,0.9); max-width: 50%; z-index: 2; font-weight: 500; line-height: 1.4; }
-        .hero-arrow { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; backdrop-filter: blur(5px); transition: 0.2s; cursor: pointer; }
+        .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; max-width: 60%; z-index: 2; letter-spacing: -0.5px; position: relative; }
+        .hero-text { font-size: 15px; color: rgba(255,255,255,0.9); max-width: 50%; z-index: 2; font-weight: 500; line-height: 1.4; position: relative; }
+        .hero-arrow { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; backdrop-filter: blur(5px); transition: 0.2s; cursor: pointer; position: relative; }
         .hero-banner:hover .hero-arrow { background: rgba(255,255,255,0.4); }
 
         .shop-layout { display: grid; grid-template-columns: 260px 1fr; gap: 30px; align-items: start; }
@@ -296,7 +302,8 @@
         .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
 
         @media (max-width: 1024px) {
-            .hero-banners { grid-template-columns: 1fr; }
+            .hero-banners { grid-template-columns: 1fr; height: auto; }
+            .hero-banner { height: 350px; }
             .shop-layout { grid-template-columns: 1fr; }
             .sidebar { flex-direction: row; overflow-x: auto; padding-bottom: 10px; gap: 15px; }
             .sidebar > div { display: flex; gap: 10px; }
@@ -324,8 +331,8 @@
             .quick-amounts { grid-template-columns: 1fr 1fr; }
             .calc-box { flex-direction: column; align-items: flex-start; gap: 15px; }
             .calc-col:last-child { border-left: none; padding-left: 0; text-align: left; }
-            .hero-side .hero-img { width: 250px; height: 250px; }
-            .hero-main { min-height: 200px; }
+            .hero-side { padding: 20px; }
+            .hero-title { font-size: 24px; max-width: 80%; }
         }
     </style>
 </head>
@@ -372,6 +379,10 @@
                 </div>
                 <div class="hero-banner hero-side">
                     <img src="assets/img/banner2.png" class="hero-img" alt="Сундук">
+                    <h2 class="hero-title">Наборами выгоднее</h2>
+                    <div class="hero-arrow" onclick="switchPage('shop')">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                    </div>
                 </div>
             </div>
 
