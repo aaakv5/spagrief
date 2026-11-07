@@ -367,10 +367,10 @@
             
             <div class="hero-banners">
                 <div class="hero-banner hero-main">
-                    <img src="assets/img/banner1.png" class="hero-img" alt="Баннер">
+                    <img src="assets/img/banner1.webp" class="hero-img" alt="Баннер" fetchpriority="high">
                 </div>
                 <div class="hero-banner hero-side">
-                    <img src="assets/img/banner2.png" class="hero-img" alt="Сундук">
+                    <img src="assets/img/banner2.webp" class="hero-img" alt="Сундук" fetchpriority="high">
                 </div>
             </div>
 
@@ -800,7 +800,7 @@
                         ${p.badge ? `<div class="badge-tk">${p.badge}</div>` : ``}
                     </div>
                     <div class="product-img">
-                        <img src="${p.img}" alt="${p.name}">
+                        <img src="${p.img}" alt="${p.name}" loading="lazy">
                     </div>
                     <div class="product-name">${p.name}</div>
                     <div class="product-footer">
