@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачивание картинок</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #121212;
+            padding: 40px;
+            border-radius: 20px;
+            border-top: 4px solid #FE2C55;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        p {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 20px;
+        }
+        textarea:focus {
+            border-color: #FE2C55;
+        }
+        button {
+            background: #FE2C55;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #d62448;
+        }
+        button:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            color: #2ecc71;
+            min-height: 20px;
+        }
+        .error {
+            color: #FE2C55;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Скачать картинки архивом</h1>
+    <p>Вставь ссылки на картинки, каждую с новой строки.</p>
+    <p>Максимум 20 штук. Они будут переименованы в 1.png, 2.png и т.д.</p>
+    
+    <textarea id="urls" placeholder="Ссылка 1&#10;Ссылка 2&#10;Ссылка 3&#10;..."></textarea>
+    
+    <button id="downloadBtn" onclick="downloadImages()">Скачать ZIP</button>
+    <div class="status" id="status"></div>
+</div>
+
+<script>
+    async function downloadImages() {
+        const textarea = document.getElementById('urls');
+        const btn = document.getElementById('downloadBtn');
+        const status = document.getElementById('status');
+
+        let urls = textarea.value.split('\n').map(url => url.trim()).filter(url => url.length > 0);
+
+        if (urls.length === 0) {
+            status.textContent = "Вставь хотя бы одну ссылку!";
+            status.className = "status error";
+            return;
+        }
+
+        if (urls.length > 20) {
+            urls = urls.slice(0, 20);
+            alert("Внимание: Максимум можно скачать 20 картинок. Будут скачаны только первые 20.");
+        }
+
+        btn.disabled = true;
+        status.textContent = "Начинаю скачивание...";
+        status.className = "status";
+
+        const zip = new JSZip();
+        let successCount = 0;
+
+        for (let i = 0; i < urls.length; i++) {
+            const url = urls[i];
+            status.textContent = `Скачивание ${i + 1} из ${urls.length}...`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Ошибка сети');
+                
+                const blob = await response.blob();
+                
+                zip.file(`${i + 1}.png`, blob);
+                successCount++;
+                
+            } catch (error) {
+                console.error(`Ошибка на ссылке ${url}:`, error);
+                zip.file(`${i + 1}.png`, "");
+            }
+        }
+
+        if (successCount === 0) {
+            status.textContent = "Не удалось скачать ни одной картинки с этих сайтов.";
+            status.className = "status error";
+            btn.disabled = false;
+            return;
+        }
+
+        status.textContent = "Создание ZIP-архива...";
+
+        try {
+            const content = await zip.generateAsync({ type: "blob" });
+
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = "skins.zip";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            status.textContent = "Готово! Архив скачан.";
+            status.className = "status";
+        } catch (error) {
+            status.textContent = "Ошибка при создании архива.";
+            status.className = "status error";
+        }
+
+        btn.disabled = false;
+    }
+</script>
+
+</body>
+</html>
