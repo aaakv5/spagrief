@@ -85,13 +85,13 @@
             position: absolute; 
             right: 0; 
             bottom: 0; 
-            height: 100%; 
-            width: auto; 
-            max-width: 55%;
+            width: 350px; 
+            height: 350px;
+            max-width: 100%;
+            max-height: 100%;
             object-fit: contain;
             object-position: right bottom;
             z-index: 1; 
-            opacity: 0.9; 
             pointer-events: none;
         }
         
@@ -324,7 +324,7 @@
             .quick-amounts { grid-template-columns: 1fr 1fr; }
             .calc-box { flex-direction: column; align-items: flex-start; gap: 15px; }
             .calc-col:last-child { border-left: none; padding-left: 0; text-align: left; }
-            .hero-side .hero-img { opacity: 0.4; }
+            .hero-side .hero-img { width: 250px; height: 250px; }
             .hero-main { min-height: 200px; }
         }
     </style>
