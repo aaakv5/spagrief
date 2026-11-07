@@ -54,13 +54,43 @@
 
         /* HERO BANNERS */
         .hero-banners { display: grid; grid-template-columns: 2.5fr 1fr; gap: 20px; margin-bottom: 40px; }
-        .hero-banner { border-radius: var(--radius-lg); padding: 40px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; min-height: 260px; }
-        .hero-main { background: linear-gradient(135deg, var(--accent) 0%, #4a0e1a 100%); }
+        .hero-banner { 
+            border-radius: var(--radius-lg); 
+            position: relative; 
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            min-height: 280px; 
+            padding: 40px;
+        }
+        .hero-main { 
+            background: linear-gradient(135deg, var(--accent) 0%, #4a0e1a 100%); 
+        }
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 50%;
+        }
+        .hero-img { 
+            position: absolute; 
+            right: 0; 
+            bottom: 0; 
+            height: 100%;
+            width: auto; 
+            max-width: 55%;
+            object-fit: contain;
+            object-position: right bottom;
+            z-index: 1; 
+            pointer-events: none;
+        }
         .hero-side { background: linear-gradient(135deg, #4a1b6d 0%, #120d1c 100%); }
         .hero-title { font-size: 32px; font-weight: 900; line-height: 1.1; margin-bottom: 12px; max-width: 60%; z-index: 2; letter-spacing: -0.5px; }
         .hero-text { font-size: 15px; color: rgba(255,255,255,0.9); max-width: 50%; z-index: 2; font-weight: 500; line-height: 1.4; }
         .hero-arrow { width: 44px; height: 44px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; backdrop-filter: blur(5px); transition: 0.2s; cursor: pointer; }
-        .hero-banner:hover .hero-arrow { background: rgba(255,255,255,0.4); }
+        .hero-banner:hover .hero-arrow { 
+            background: rgba(255,255,255,0.4); 
+        }
         
         .hero-img { position: absolute; right: 0; bottom: 0; height: 100%; max-width: 55%; object-fit: cover; z-index: 1; opacity: 0.9; pointer-events: none; }
 
@@ -297,6 +327,12 @@
             .quick-amounts { grid-template-columns: 1fr 1fr; }
             .calc-box { flex-direction: column; align-items: flex-start; gap: 15px; }
             .calc-col:last-child { border-left: none; padding-left: 0; text-align: left; }
+            .hero-content {
+                max-width: 70%;
+            }
+            .hero-img {
+                opacity: 0.4;
+            }
         }
     </style>
 </head>
@@ -340,7 +376,15 @@
             
             <div class="hero-banners">
                 <div class="hero-banner hero-main">
-                    <img src="assets/img/banner1.png" class="hero-img" alt="Промокод">
+                    <img src="assets/img/banner1.png" class="hero-img" alt="Персонаж">
+                    
+                    <div class="hero-content">
+                        <h2 class="hero-title">Покупайте<br>привилегии с<br>доплатой</h2>
+                        <p class="hero-text">Оплачивайте только разницу<br>в стоимости привилегий</p>
+                        <div class="hero-arrow" onclick="switchPage('shop')">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+                        </div>
+                    </div>
                 </div>
                 <div class="hero-banner hero-side">
                     <img src="assets/img/banner2.png" class="hero-img" alt="Сундук" style="right: 5%; max-width: 60%; opacity: 0.6;">
