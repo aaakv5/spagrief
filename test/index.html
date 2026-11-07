@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>SpaGrief — купить донат: привилегии и токены</title>
-    <meta name="description" content="Официальный донат-магазин Minecraft-сервера SpaGrief. Выдача на ник после оплаты, СБП и карты, без регистрации.">
+    <meta name="description" content="Официальный донат-магазин Minecraft-сервера SpaGrief. Выдача на ник после оплаты, СБП или карты.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -775,17 +775,17 @@
         fetchOnline();
 
         const privileges = [
-            { id: 1, name: "Барон", img: "https://minotar.net/armor/body/Notch/100.png", p30: 49, p90: 89, pForever: 139, badge: "", hot: false, features: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон", "/time", "/weather", "/loom"] },
-            { id: 2, name: "Страж", img: "https://minotar.net/armor/body/Notch/100.png", p30: 89, p90: 159, pForever: 249, badge: "", hot: false, features: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж", "/time", "/weather", "/loom"] },
-            { id: 3, name: "Герой", img: "https://minotar.net/armor/body/Notch/100.png", p30: 139, p90: 249, pForever: 399, badge: "", hot: false, features: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой", "/time", "/weather", "/loom"] },
-            { id: 4, name: "Аспид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 179, p90: 319, pForever: 499, badge: "", hot: false, features: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид", "/time", "/weather", "/loom"] },
-            { id: 5, name: "Сквид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 279, p90: 499, pForever: 799, badge: "", hot: false, features: ["Префикс в чате и табе: [Сквид] ВашНик", "/kit Сквид", "/time", "/weather", "/loom"] },
-            { id: 6, name: "Глава", img: "https://minotar.net/armor/body/Notch/100.png", p30: 379, p90: 679, pForever: 1099, badge: "", hot: false, features: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава", "/time", "/weather", "/loom"] },
-            { id: 7, name: "Элита", img: "https://minotar.net/armor/body/Notch/100.png", p30: 579, p90: 1049, pForever: 1699, badge: "+13.000 ТК", hot: false, features: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита", "/time", "/weather", "/loom"] },
-            { id: 8, name: "Титан", img: "https://minotar.net/armor/body/Notch/100.png", p30: 779, p90: 1399, pForever: 2299, badge: "+25.000 ТК", hot: false, features: ["Префикс в чате и табе: [Титан] ВашНик", "/kit Титан", "/time", "/weather", "/loom"] },
-            { id: 9, name: "Принц", img: "https://minotar.net/armor/body/Notch/100.png", p30: 979, p90: 1799, pForever: 2899, badge: "+35.000 ТК", hot: false, features: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц", "/time", "/weather", "/loom"] },
-            { id: 10, name: "Князь", img: "https://minotar.net/armor/body/Notch/100.png", p30: 1299, p90: 2399, pForever: 3899, badge: "+48.000 ТК", hot: true, features: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь", "/time", "/weather", "/loom"] },
-            { id: 11, name: "Герцог", img: "https://minotar.net/armor/body/Notch/100.png", p30: 2799, p90: 5199, pForever: 8399, badge: "+75.000 ТК", hot: true, features: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог", "/time", "/weather", "/loom"] }
+            { id: 1, name: "Барон", img: "https://render.crafty.gg/3d/bust/x_Baron_x", p30: 49, p90: 89, pForever: 139, badge: "", hot: false, features: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон", "/time", "/weather", "/loom"] },
+            { id: 2, name: "Страж", img: "https://render.crafty.gg/3d/bust/AvanGuard_1", p30: 89, p90: 159, pForever: 249, badge: "", hot: false, features: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж", "/time", "/weather", "/loom"] },
+            { id: 3, name: "Герой", img: "https://render.crafty.gg/3d/bust/MasterHero", p30: 139, p90: 249, pForever: 399, badge: "", hot: false, features: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой", "/time", "/weather", "/loom"] },
+            { id: 4, name: "Аспид", img: "https://render.crafty.gg/3d/bust/AspidFeed", p30: 179, p90: 319, pForever: 499, badge: "", hot: false, features: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид", "/time", "/weather", "/loom"] },
+            { id: 5, name: "Сквид", img: "https://render.crafty.gg/3d/bust/Monochrome_Squid", p30: 279, p90: 499, pForever: 799, badge: "", hot: false, features: ["Префикс в чате и табе: [Сквид] ВашНик", "/kit Сквид", "/time", "/weather", "/loom"] },
+            { id: 6, name: "Глава", img: "https://render.crafty.gg/3d/bust/LordCrown", p30: 379, p90: 679, pForever: 1099, badge: "", hot: false, features: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава", "/time", "/weather", "/loom"] },
+            { id: 7, name: "Элита", img: "https://render.crafty.gg/3d/bust/__Elite_", p30: 579, p90: 1049, pForever: 1699, badge: "", hot: false, features: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита", "/time", "/weather", "/loom"] },
+            { id: 8, name: "Титан", img: "https://render.crafty.gg/3d/bust/titan0111", p30: 779, p90: 1399, pForever: 2299, badge: "", hot: false, features: ["Префикс в чате и табе: [Титан] ВашНик", "/kit Титан", "/time", "/weather", "/loom"] },
+            { id: 9, name: "Принц", img: "https://render.crafty.gg/3d/bust/__Prince__", p30: 979, p90: 1799, pForever: 2899, badge: "", hot: true, features: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц", "/time", "/weather", "/loom"] },
+            { id: 10, name: "Князь", img: "https://render.crafty.gg/3d/bust/Knyaz", p30: 1299, p90: 2399, pForever: 3899, badge: "", hot: true, features: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь", "/time", "/weather", "/loom"] },
+            { id: 11, name: "Герцог", img: "https://render.crafty.gg/3d/bust/Duke", p30: 2799, p90: 5199, pForever: 8399, badge: "", hot: true, features: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог", "/time", "/weather", "/loom"] }
         ];
 
         const chests = [
