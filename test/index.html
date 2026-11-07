@@ -14,7 +14,7 @@
             --bg-panel: #121212;
             --bg-card: #1a1a1a;
             --bg-input: #222222;
-            --accent: #FE2C55; /* Ваш цвет */
+            --accent: #FE2C55;
             --accent-hover: #d62448;
             --text-main: #ffffff;
             --text-muted: #999999;
@@ -73,10 +73,17 @@
         .content-title { font-size: 32px; font-weight: 900; letter-spacing: -0.5px; }
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        
         .product-card { background: var(--bg-panel); border-radius: var(--radius-lg); padding: 24px; display: flex; flex-direction: column; position: relative; transition: transform 0.2s; }
         .product-card:hover { transform: translateY(-4px); }
-        .product-img { width: 120px; height: 120px; margin: 20px auto 30px; display: flex; justify-content: center; align-items: center; }
+        
+        .product-badges { display: flex; justify-content: space-between; align-items: flex-start; position: absolute; top: 20px; left: 20px; right: 20px; }
+        .badge-hot { background: rgba(254, 44, 85, 0.1); color: var(--accent); padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; display: flex; align-items: center; gap: 4px; }
+        .badge-tk { background: rgba(46, 204, 113, 0.1); color: #2ecc71; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 800; margin-left: auto; }
+
+        .product-img { width: 120px; height: 120px; margin: 30px auto 30px; display: flex; justify-content: center; align-items: center; }
         .product-img img { max-width: 100%; max-height: 100%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
+        
         .product-name { font-size: 18px; font-weight: 800; margin-bottom: 20px; }
         .product-footer { display: flex; justify-content: space-between; align-items: center; margin-top: auto; }
         .product-price { font-size: 15px; font-weight: 700; color: var(--text-muted); }
@@ -123,6 +130,56 @@
         .currency-right { display: flex; justify-content: center; align-items: center; position: relative; background: radial-gradient(circle, rgba(254,44,85,0.1) 0%, transparent 70%); border-radius: var(--radius-lg); }
         .currency-right img { max-width: 80%; max-height: 80%; object-fit: contain; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)); }
 
+        /* RULES PAGE */
+        .rules-layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 60px; margin-top: 40px; }
+        .rules-side h1 { font-size: 40px; font-weight: 900; margin-bottom: 20px; letter-spacing: -1px; line-height: 1.1; }
+        .rules-side p { color: var(--text-muted); font-size: 15px; line-height: 1.6; max-width: 300px; }
+        .accordion-item { background: var(--bg-panel); border-radius: var(--radius-md); margin-bottom: 12px; overflow: hidden; }
+        .accordion-header { width: 100%; padding: 24px; background: transparent; color: var(--text-main); font-size: 16px; font-weight: 700; text-align: left; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; }
+        .accordion-header:hover { background: var(--bg-card); }
+        .accordion-icon { width: 28px; height: 28px; background: var(--bg-main); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 10px; transition: transform 0.3s; }
+        .accordion-item.active .accordion-icon { transform: rotate(180deg); }
+        .accordion-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; padding: 0 24px; color: var(--text-muted); font-size: 14px; line-height: 1.8; }
+        .accordion-item.active .accordion-content { padding-bottom: 24px; }
+        .accordion-content span { color: var(--accent); font-weight: 700; margin-right: 6px; }
+
+        /* BANLIST PAGE */
+        .banlist-header { margin-bottom: 30px; }
+        .banlist-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
+        .banlist-header p { color: var(--text-muted); font-size: 15px; }
+        .banlist-controls { display: flex; gap: 15px; margin-bottom: 20px; align-items: center; }
+        .ban-tabs { display: flex; gap: 5px; background: var(--bg-panel); padding: 5px; border-radius: var(--radius-md); }
+        .ban-tab { background: transparent; color: var(--text-muted); padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 700; font-size: 14px; transition: 0.2s; }
+        .ban-tab.active { background: var(--bg-card); color: var(--text-main); }
+        .search-wrap { flex: 1; position: relative; }
+        .search-input { width: 100%; background: var(--bg-panel); border: 1px solid transparent; padding: 14px 20px 14px 45px; border-radius: var(--radius-md); color: var(--text-main); font-size: 14px; outline: none; transition: 0.2s; }
+        .search-input:focus { border-color: var(--accent); }
+        .search-icon { position: absolute; left: 16px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; fill: var(--text-muted); }
+        .table-wrap { background: var(--bg-panel); border-radius: var(--radius-md); overflow: hidden; }
+        .ban-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .ban-table th { padding: 20px; font-size: 12px; font-weight: 800; color: var(--text-muted); text-transform: uppercase; border-bottom: 1px solid var(--border-color); letter-spacing: 0.5px; }
+        .ban-table td { padding: 20px; border-bottom: 1px solid var(--border-color); font-size: 14px; }
+        .ban-table tr:last-child td { border-bottom: none; }
+        .ban-table tr:hover { background: var(--bg-card); }
+        .player-cell { display: flex; align-items: center; gap: 15px; font-weight: 800; }
+        .player-avatar { width: 36px; height: 36px; background: #333; border-radius: 6px; object-fit: cover; }
+        .status-badge { padding: 6px 10px; border-radius: 6px; font-size: 12px; font-weight: 800; }
+        .status-active { background: rgba(254, 44, 85, 0.1); color: var(--accent); }
+        .status-expired { background: rgba(168, 162, 154, 0.1); color: var(--text-muted); }
+
+        /* CONTACTS PAGE */
+        .contacts-header { margin-bottom: 40px; }
+        .contacts-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
+        .contacts-header p { color: var(--text-muted); font-size: 15px; }
+        .contacts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .contact-card { background: var(--bg-panel); border-radius: var(--radius-lg); padding: 30px; display: flex; flex-direction: column; justify-content: space-between; min-height: 240px; position: relative; overflow: hidden; transition: 0.3s; }
+        .contact-card:hover { transform: translateY(-5px); background: var(--bg-card); }
+        .contact-card h3 { font-size: 22px; font-weight: 800; margin-bottom: 12px; z-index: 2; line-height: 1.2; }
+        .contact-card p { color: var(--text-muted); font-size: 14px; line-height: 1.5; z-index: 2; max-width: 80%; }
+        .contact-icon { position: absolute; right: -10px; bottom: -10px; font-size: 100px; opacity: 0.1; transform: rotate(-10deg); z-index: 1; }
+        .contact-arrow { width: 40px; height: 40px; border-radius: 50%; background: var(--bg-main); display: flex; justify-content: center; align-items: center; margin-top: 20px; z-index: 2; transition: 0.2s; }
+        .contact-card:hover .contact-arrow { background: var(--accent); color: #fff; }
+
         /* HOW TO JOIN */
         .join-header { margin-bottom: 40px; }
         .join-header h1 { font-size: 40px; font-weight: 900; margin-bottom: 10px; letter-spacing: -1px; }
@@ -153,17 +210,14 @@
         .payments { display: flex; gap: 15px; align-items: center; }
         .payments span { font-weight: 800; color: var(--text-muted); font-style: italic; font-size: 16px; }
 
-        /* MODAL (NEW DESIGN) */
+        /* MODAL */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 20px; }
         .modal-content { background: var(--bg-panel); border-radius: var(--radius-lg); width: 100%; max-width: 800px; position: relative; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.8); display: flex; }
-        
         .modal-left { flex: 1; background: var(--bg-card); padding: 40px; display: flex; flex-direction: column; border-right: 1px solid var(--border-color); }
         .modal-right { flex: 1; padding: 40px; display: flex; flex-direction: column; background: var(--bg-panel); }
-        
         .modal-close { position: absolute; top: 15px; right: 15px; background: rgba(255,255,255,0.05); color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 20px; transition: 0.2s; z-index: 10; }
         .modal-close:hover { background: var(--accent); color: #fff; }
-
-        /* Modal Left Content */
+        
         .item-preview { display: flex; align-items: center; gap: 15px; margin-bottom: 30px; }
         .item-preview img { width: 80px; height: 80px; object-fit: contain; }
         .item-preview-info h3 { font-size: 28px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; }
@@ -175,10 +229,8 @@
         .features-list li span { color: var(--text-main); font-weight: 700; }
         .features-list li .num { color: var(--text-muted); font-weight: 800; min-width: 20px; }
 
-        /* Modal Right Content */
         .step-indicator { font-size: 12px; font-weight: 800; color: var(--accent); text-transform: uppercase; margin-bottom: 5px; }
         .step-title { font-size: 22px; font-weight: 800; margin-bottom: 20px; }
-        
         .input-label { font-size: 12px; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; display: block; }
         .input-field { width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-main); padding: 14px; font-size: 14px; border-radius: var(--radius-sm); outline: none; transition: 0.2s; font-weight: 600; margin-bottom: 15px; }
         .input-field:focus { border-color: var(--accent); }
@@ -212,6 +264,9 @@
             .mode-btn, .cat-btn { min-width: 150px; margin-bottom: 0; justify-content: center; }
             .currency-layout { grid-template-columns: 1fr; }
             .currency-right { display: none; }
+            .rules-layout { grid-template-columns: 1fr; gap: 30px; }
+            .contacts-grid { grid-template-columns: 1fr 1fr; }
+            .step-block { grid-template-columns: 1fr; padding: 30px; }
             .footer-top { grid-template-columns: 1fr 1fr; }
             .nav { display: none; }
         }
@@ -219,6 +274,8 @@
         @media (max-width: 768px) {
             .header-inner { flex-direction: column; gap: 15px; }
             .products-grid { grid-template-columns: 1fr; }
+            .ban-table th, .ban-table td { padding: 15px 10px; font-size: 13px; }
+            .contacts-grid { grid-template-columns: 1fr; }
             .footer-top { grid-template-columns: 1fr; }
             .footer-bottom { flex-direction: column; gap: 20px; text-align: center; }
             .modal-content { flex-direction: column; max-height: 90vh; overflow-y: auto; }
@@ -249,6 +306,12 @@
                 </a>
                 <a href="#" data-page="rules" onclick="switchPage('rules')">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> ПРАВИЛА
+                </a>
+                <a href="#" data-page="banlist" onclick="switchPage('banlist')">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg> БАН-ЛИСТ
+                </a>
+                <a href="#" data-page="contacts" onclick="switchPage('contacts')">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg> КОНТАКТЫ
                 </a>
                 <a href="#" data-page="join" onclick="switchPage('join')">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> КАК ЗАЙТИ?
@@ -348,6 +411,159 @@
             </div>
         </section>
 
+        <!-- RULES PAGE -->
+        <section id="page-rules" class="page">
+            <div class="rules-layout">
+                <div class="rules-side">
+                    <h1>ПРАВИЛА ПРОЕКТА</h1>
+                    <p>Игровые правила проекта SpaGrief.<br><br>Заходя на сервер, вы автоматически принимаете эти правила.</p>
+                </div>
+                <div class="rules-content">
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            1. Общие положения
+                            <div class="accordion-icon">▼</div>
+                        </button>
+                        <div class="accordion-content">
+                            <span>1.1</span> Незнание правил не освобождает вас от ответственности.<br>
+                            <span>1.2</span> Начав играть на наших серверах, Вы автоматически подтверждаете своё согласие с данным сводом правил.<br>
+                            <span>1.3</span> Администратор вправе наказать игрока по причине, не указанной в настоящих правилах.<br>
+                            <span>1.4</span> Администрация не несет ответственности за временную или постоянную невозможность игры на сервере конкретным лицом или группой лиц.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            2. Приобретение платных возможностей и вещей
+                            <div class="accordion-icon">▼</div>
+                        </button>
+                        <div class="accordion-content">
+                            <span>2.1</span> Деньги, потраченные на услуги сервера, не возвращаются ни при каких обстоятельствах.<br>
+                            <span>2.2</span> Попытки махинаций оплатами, или ввод Администрации в заблуждение наказываются баном без возврата средств.<br>
+                            <span>2.3</span> Предоставьте чек оплаты, если хотите написать Администрации о пропаже, непоявлении доната после покупки.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            3. Внутриигровое общение
+                            <div class="accordion-icon">▼</div>
+                        </button>
+                        <div class="accordion-content">
+                            <span>3.1</span> Запрещен Капс/Спам/Флуд в любом из чатов.<br>
+                            <span>3.2</span> Запрещены унижения, оскорбления игроков.<br>
+                            <span>3.3</span> Запрещена нецензурная лексика (маты, скрытые маты).<br>
+                            <span>3.4</span> Запрещено рекламировать/упоминать посторонние ресурсы, которые не связаны с проектом.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            4. Игровой процесс и прочее
+                            <div class="accordion-icon">▼</div>
+                        </button>
+                        <div class="accordion-content">
+                            <span>4.1</span> Запрещено мошенничество, обман администрации.<br>
+                            <span>4.2</span> Запрещено продавать/покупать у игроков игровые ценности за реальную валюту.<br>
+                            <span>4.3</span> Запрещено пользоваться сторонними программами, читами, кликерами, автоматизациями.<br>
+                            <span>4.4</span> Запрещено выдавать себя за Администрацию, устанавливать ники похожие на Администрацию.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-header" onclick="toggleAccordion(this)">
+                            5. Правила для донатеров
+                            <div class="accordion-icon">▼</div>
+                        </button>
+                        <div class="accordion-content">
+                            <span>5.1</span> Донатер обязан соблюдать все правила сервера. Наличие привилегии не дает права нарушать правила.<br>
+                            <span>5.2</span> При нарушении правил привилегия может быть снята без возврата средств.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BANLIST PAGE -->
+        <section id="page-banlist" class="page">
+            <div class="banlist-header">
+                <h1>БАН-ЛИСТ</h1>
+                <p>Наказания общие для Анархии и выдаются по правилам проекта.</p>
+            </div>
+            <div class="banlist-controls">
+                <div class="ban-tabs">
+                    <button class="ban-tab active">БАНЫ</button>
+                    <button class="ban-tab">МУТЫ</button>
+                    <button class="ban-tab">ПРЕДУПРЕЖДЕНИЯ</button>
+                </div>
+                <div class="search-wrap">
+                    <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" class="search-input" placeholder="Ник игрока или модератора...">
+                </div>
+            </div>
+            <div class="table-wrap">
+                <table class="ban-table">
+                    <thead>
+                        <tr>
+                            <th>Игрок</th>
+                            <th>Причина</th>
+                            <th>Модератор</th>
+                            <th>Выдан</th>
+                            <th>Срок</th>
+                        </tr>
+                    </thead>
+                    <tbody id="banlist-body">
+                        <!-- Mock Data -->
+                        <tr>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/MrTyOne/36.png" class="player-avatar"> MrTyOne</div></td>
+                            <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
+                            <td>SpaAC</td>
+                            <td>14 минут назад</td>
+                            <td><span class="status-badge status-active">ещё 13 д</span></td>
+                        </tr>
+                        <tr>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/flow1488/36.png" class="player-avatar"> flow1488</div></td>
+                            <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
+                            <td>SpaAC</td>
+                            <td>26 минут назад</td>
+                            <td><span class="status-badge status-active">ещё 13 д</span></td>
+                        </tr>
+                        <tr>
+                            <td><div class="player-cell"><img src="https://minotar.net/helm/Rix_2006/36.png" class="player-avatar"> Rix_2006</div></td>
+                            <td>Пункт 4.2 (Использование запрещённого ПО)</td>
+                            <td>SpaAC</td>
+                            <td>58 минут назад</td>
+                            <td><span class="status-badge status-expired">Истек</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- CONTACTS PAGE -->
+        <section id="page-contacts" class="page">
+            <div class="contacts-header">
+                <h1>КОНТАКТЫ</h1>
+                <p>Свяжитесь с нами любым удобным способом — ответим быстро!</p>
+            </div>
+            <div class="contacts-grid">
+                <div class="contact-card">
+                    <h3>Обратиться в тех. поддержку</h3>
+                    <p>Возникли проблемы? Напишите в бот — разберёмся и поможем</p>
+                    <div class="contact-icon">🛠️</div>
+                    <a href="https://t.me/SpaGriefHelpBot" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
+                </div>
+                <div class="contact-card">
+                    <h3>Вступай в наш Discord сервер</h3>
+                    <p>Общайся с другими игроками</p>
+                    <div class="contact-icon">💬</div>
+                    <a href="https://discord.gg/mXtbmPW7VQ" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
+                </div>
+                <div class="contact-card">
+                    <h3>Подпишись на Telegram-канал</h3>
+                    <p>Узнавай обо всех новостях первым</p>
+                    <div class="contact-icon">✈️</div>
+                    <a href="https://t.me/spagrief" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
+                </div>
+            </div>
+        </section>
+
         <!-- HOW TO JOIN PAGE -->
         <section id="page-join" class="page">
             <div class="join-header">
@@ -387,25 +603,6 @@
             </div>
         </section>
 
-        <!-- RULES PAGE -->
-        <section id="page-rules" class="page">
-            <div class="join-header">
-                <h1>ПРАВИЛА ПРОЕКТА</h1>
-                <p>Заходя на сервер, вы автоматически принимаете эти правила.</p>
-            </div>
-            <div style="color:var(--text-muted); font-size:14px; line-height:1.8;">
-                <p>1.1 Незнание правил не освобождает вас от ответственности.</p>
-                <p>1.2 Начав играть на наших серверах, Вы автоматически подтверждаете своё согласие с данным сводом правил.</p>
-                <p>1.3 Администратор вправе наказать игрока по причине, не указанной в настоящих правилах.</p>
-                <p>1.4 Запрещен Капс/Спам/Флуд в любом из чатов.</p>
-                <p>1.5 Запрещены унижения, оскорбления игроков.</p>
-                <p>1.6 Запрещена нецензурная лексика (маты, скрытые маты).</p>
-                <p>1.7 Запрещено мошенничество, обман администрации.</p>
-                <p>1.8 Запрещено пользоваться сторонними программами, читами, кликерами, автоматизациями.</p>
-                <p>1.9 Запрещено выдавать себя за Администрацию, устанавливать ники похожие на Администрацию.</p>
-            </div>
-        </section>
-
     </main>
 
     <footer class="footer">
@@ -420,7 +617,8 @@
                     <ul>
                         <li><a href="#" onclick="switchPage('shop')">Главная</a></li>
                         <li><a href="#" onclick="switchPage('rules')">Правила</a></li>
-                        <li><a href="#" onclick="switchPage('join')">Как зайти?</a></li>
+                        <li><a href="#" onclick="switchPage('banlist')">Бан-лист</a></li>
+                        <li><a href="#" onclick="switchPage('contacts')">Контакты</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -528,25 +726,25 @@
         setInterval(fetchOnline, 60000);
         fetchOnline();
 
-        // Data
+        // Data with updated prices and badges
         const ranks = [
-            { id: 1, name: "Барон", img: "https://minotar.net/armor/body/Notch/100.png", p30: 49, p90: 89, pForever: 139, features: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон", "/time", "/weather", "/loom"] },
-            { id: 2, name: "Страж", img: "https://minotar.net/armor/body/Notch/100.png", p30: 89, p90: 159, pForever: 249, features: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж", "/time", "/weather", "/loom"] },
-            { id: 3, name: "Герой", img: "https://minotar.net/armor/body/Notch/100.png", p30: 139, p90: 249, pForever: 399, features: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой", "/time", "/weather", "/loom"] },
-            { id: 4, name: "Аспид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 179, p90: 319, pForever: 499, features: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид", "/time", "/weather", "/loom"] },
-            { id: 5, name: "Сквид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 279, p90: 499, pForever: 799, features: ["Префикс в чате и табе: [Сквид] ВашНик", "/kit Сквид", "/time", "/weather", "/loom"] },
-            { id: 6, name: "Глава", img: "https://minotar.net/armor/body/Notch/100.png", p30: 379, p90: 679, pForever: 1099, features: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава", "/time", "/weather", "/loom"] },
-            { id: 7, name: "Элита", img: "https://minotar.net/armor/body/Notch/100.png", p30: 579, p90: 1049, pForever: 1699, features: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита", "/time", "/weather", "/loom"] },
-            { id: 8, name: "Титан", img: "https://minotar.net/armor/body/Notch/100.png", p30: 979, p90: 1799, pForever: 2899, features: ["Префикс в чате и табе: [Титан] ВашНик", "/kit Титан", "/time", "/weather", "/loom"] },
-            { id: 9, name: "Принц", img: "https://minotar.net/armor/body/Notch/100.png", p30: 1299, p90: 2399, pForever: 3899, features: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц", "/time", "/weather", "/loom"] },
-            { id: 10, name: "Князь", img: "https://minotar.net/armor/body/Notch/100.png", p30: 1999, p90: 3699, pForever: 5999, features: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь", "/time", "/weather", "/loom"] },
-            { id: 11, name: "Герцог", img: "https://minotar.net/armor/body/Notch/100.png", p30: 2999, p90: 5499, pForever: 8999, features: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог", "/time", "/weather", "/loom"] }
+            { id: 1, name: "Барон", img: "https://minotar.net/armor/body/Notch/100.png", p30: 49, p90: 89, pForever: 139, badge: "", hot: false, features: ["Префикс в чате и табе: [Барон] ВашНик", "/kit Барон", "/time", "/weather", "/loom"] },
+            { id: 2, name: "Страж", img: "https://minotar.net/armor/body/Notch/100.png", p30: 89, p90: 159, pForever: 249, badge: "", hot: false, features: ["Префикс в чате и табе: [Страж] ВашНик", "/kit Страж", "/time", "/weather", "/loom"] },
+            { id: 3, name: "Герой", img: "https://minotar.net/armor/body/Notch/100.png", p30: 139, p90: 249, pForever: 399, badge: "", hot: false, features: ["Префикс в чате и табе: [Герой] ВашНик", "/kit Герой", "/time", "/weather", "/loom"] },
+            { id: 4, name: "Аспид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 179, p90: 319, pForever: 499, badge: "", hot: false, features: ["Префикс в чате и табе: [Аспид] ВашНик", "/kit Аспид", "/time", "/weather", "/loom"] },
+            { id: 5, name: "Сквид", img: "https://minotar.net/armor/body/Notch/100.png", p30: 279, p90: 499, pForever: 799, badge: "", hot: false, features: ["Префикс в чате и табе: [Сквид] ВашНик", "/kit Сквид", "/time", "/weather", "/loom"] },
+            { id: 6, name: "Глава", img: "https://minotar.net/armor/body/Notch/100.png", p30: 379, p90: 679, pForever: 1099, badge: "", hot: false, features: ["Префикс в чате и табе: [Глава] ВашНик", "/kit Глава", "/time", "/weather", "/loom"] },
+            { id: 7, name: "Элита", img: "https://minotar.net/armor/body/Notch/100.png", p30: 579, p90: 1049, pForever: 1699, badge: "+13.000 ТК", hot: false, features: ["Префикс в чате и табе: [Элита] ВашНик", "/kit Элита", "/time", "/weather", "/loom"] },
+            { id: 8, name: "Титан", img: "https://minotar.net/armor/body/Notch/100.png", p30: 779, p90: 1399, pForever: 2299, badge: "+25.000 ТК", hot: false, features: ["Префикс в чате и табе: [Титан] ВашНик", "/kit Титан", "/time", "/weather", "/loom"] },
+            { id: 9, name: "Принц", img: "https://minotar.net/armor/body/Notch/100.png", p30: 979, p90: 1799, pForever: 2899, badge: "+35.000 ТК", hot: false, features: ["Префикс в чате и табе: [Принц] ВашНик", "/kit Принц", "/time", "/weather", "/loom"] },
+            { id: 10, name: "Князь", img: "https://minotar.net/armor/body/Notch/100.png", p30: 1299, p90: 2399, pForever: 3899, badge: "+48.000 ТК", hot: true, features: ["Префикс в чате и табе: [Князь] ВашНик", "/kit Князь", "/time", "/weather", "/loom"] },
+            { id: 11, name: "Герцог", img: "https://minotar.net/armor/body/Notch/100.png", p30: 2799, p90: 5199, pForever: 8399, badge: "+75.000 ТК", hot: true, features: ["Префикс в чате и табе: [Герцог] ВашНик", "/kit Герцог", "/time", "/weather", "/loom"] }
         ];
 
         let currentProduct = null;
         let currentPeriod = '30';
         let currentPrice = 0;
-        let currentType = 'rank'; // 'rank' or 'tokens'
+        let currentType = 'rank';
         let tokenAmountRub = 100;
 
         // Render Products
@@ -554,19 +752,22 @@
             const grid = document.getElementById('product-grid');
             grid.innerHTML = ranks.map(r => `
                 <div class="product-card">
+                    <div class="product-badges">
+                        ${r.hot ? `<div class="badge-hot">🔥 Хит продаж</div>` : `<div></div>`}
+                        ${r.badge ? `<div class="badge-tk">${r.badge}</div>` : ``}
+                    </div>
                     <div class="product-img">
                         <img src="${r.img}" alt="${r.name}">
                     </div>
                     <div class="product-name">${r.name}</div>
                     <div class="product-footer">
-                        <div class="product-price">от <strong>${r.p30}</strong> ₽</div>
+                        <div class="product-price">от <strong>${r.p30}</strong> РУБ</div>
                         <button class="buy-btn" onclick="openRankModal(${r.id})">Купить <svg viewBox="0 0 24 24"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></button>
                     </div>
                 </div>
             `).join('');
         }
 
-        // Category Switching
         function filterCategory(category, btnElement) {
             document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
             btnElement.classList.add('active');
@@ -580,8 +781,6 @@
             } else {
                 gridView.style.display = 'block';
                 currencyView.style.display = 'none';
-                
-                // For simplicity, only privileges has real data right now
                 document.getElementById('current-category-title').innerText = category === 'privileges' ? 'Привилегии' : 'Товары';
                 if (category === 'privileges') renderPrivileges();
                 else document.getElementById('product-grid').innerHTML = '<p style="color:var(--text-muted)">В этой категории пока нет товаров.</p>';
@@ -595,7 +794,6 @@
             document.getElementById('calc-tokens').innerHTML = (tokenAmountRub * 100).toLocaleString('ru-RU') + ' <small>ТК</small>';
             document.getElementById('btn-token-text').innerText = `Купить за ${tokenAmountRub.toLocaleString('ru-RU')} ₽`;
             
-            // Update quick buttons active state
             document.querySelectorAll('.quick-btn').forEach(btn => btn.classList.remove('active'));
             const activeBtn = Array.from(document.querySelectorAll('.quick-btn')).find(b => b.innerText.includes(tokenAmountRub + ' '));
             if (activeBtn) activeBtn.classList.add('active');
@@ -619,9 +817,9 @@
             list.innerHTML = currentProduct.features.map((f, i) => `<li><span class="num">0${i+1}</span> <span>${f}</span></li>`).join('');
 
             // Set prices
-            document.getElementById('price-30').innerText = currentProduct.p30 + ' ₽';
-            document.getElementById('price-90').innerText = currentProduct.p90 + ' ₽';
-            document.getElementById('price-forever').innerText = currentProduct.pForever + ' ₽';
+            document.getElementById('price-30').innerText = currentProduct.p30 + ' РУБ';
+            document.getElementById('price-90').innerText = currentProduct.p90 + ' РУБ';
+            document.getElementById('price-forever').innerText = currentProduct.pForever + ' РУБ';
 
             // Reset form
             document.getElementById('input-nick').value = "";
@@ -637,7 +835,6 @@
             document.getElementById('modal-item-img').src = "https://minotar.net/helm/Diamond_Block/100.png";
             document.getElementById('modal-item-name').innerText = "Токены";
             
-            // Hide features and periods for tokens
             document.getElementById('modal-features-list').innerHTML = `
                 <li><span>Игровая валюта</span></li>
                 <li><span>Вы получите: ${(tokenAmountRub * 100).toLocaleString('ru-RU')} ТК</span></li>
@@ -645,8 +842,8 @@
             document.getElementById('period-selector').style.display = 'none';
             
             currentPrice = tokenAmountRub;
-            document.getElementById('modal-item-price').innerText = currentPrice + ' ₽';
-            document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
+            document.getElementById('modal-item-price').innerText = currentPrice + ' РУБ';
+            document.getElementById('modal-total-price').innerText = currentPrice + ' РУБ';
 
             document.getElementById('input-nick').value = "";
             document.getElementById('input-promo').value = "";
@@ -663,13 +860,12 @@
             else if (period === '90') currentPrice = currentProduct.p90;
             else currentPrice = currentProduct.pForever;
 
-            document.getElementById('modal-item-price').innerText = currentPrice + ' ₽';
-            document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
+            document.getElementById('modal-item-price').innerText = currentPrice + ' РУБ';
+            document.getElementById('modal-total-price').innerText = currentPrice + ' РУБ';
         }
 
         function closeModal() {
             document.getElementById('payment-modal').style.display = 'none';
-            // Восстанавливаем видимость периодов для следующего открытия
             document.getElementById('period-selector').style.display = 'flex'; 
         }
 
@@ -687,13 +883,10 @@
             btn.disabled = true;
             btn.innerText = "ЗАГРУЗКА...";
 
-            // Заглушки для ID товаров. Вам нужно заменить их на реальные ID из EasyDonate!
             let edId = 0;
             if (currentType === 'tokens') {
-                edId = 2000; // Замените на ID токенов
+                edId = 2000; 
             } else {
-                // Генерация фейкового ID для примера
-                // 1 = Барон 30д, 2 = Барон 90д, 3 = Барон навсегда и т.д.
                 let base = currentProduct.id * 10;
                 if (currentPeriod === '30') edId = base + 1;
                 else if (currentPeriod === '90') edId = base + 2;
@@ -731,7 +924,7 @@
             }
         }
 
-        // Navigation
+        // Navigation & UI
         function switchPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav a').forEach(a => a.classList.remove('active'));
@@ -741,6 +934,18 @@
             if (navLink) navLink.classList.add('active');
             
             window.scrollTo(0, 0);
+        }
+
+        function toggleAccordion(btn) {
+            const item = btn.parentElement;
+            const content = btn.nextElementSibling;
+            item.classList.toggle('active');
+            
+            if (item.classList.contains('active')) {
+                content.style.maxHeight = content.scrollHeight + "px";
+            } else {
+                content.style.maxHeight = null;
+            }
         }
 
         function copyIP() {
