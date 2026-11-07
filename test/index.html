@@ -74,11 +74,11 @@
         }
         .hero-main .hero-img {
             position: absolute;
-            top: 5%;            /* Отступ сверху 5% */
-            left: 5%;           /* Отступ слева 5% */
-            width: 90%;         /* Ширина картинки 90% от блока */
-            height: 90%;        /* Высота картинки 90% от блока */
-            object-fit: contain; /* Картинка вписывается целиком, не обрезается */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Заполняет весь блок, сохраняя пропорции */
             object-position: center;
             z-index: 1;
             display: block;
@@ -378,10 +378,6 @@
                 </div>
                 <div class="hero-banner hero-side">
                     <img src="assets/img/banner2.png" class="hero-img" alt="Сундук">
-                    <h2 class="hero-title">Наборами выгоднее</h2>
-                    <div class="hero-arrow" onclick="switchPage('shop')">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
-                    </div>
                 </div>
             </div>
 
