@@ -735,6 +735,7 @@
     <script>
         const PROXY_URL = "https://spagrief-easydonate.aquadark5647.workers.dev";
         const SERVER_ID = 143248;
+        const TOKEN_ED_ID = 1128308;
 
         async function fetchOnline() {
             try {
@@ -875,7 +876,7 @@
         function openTokenModal() {
             currentType = 'tokens';
             
-            document.getElementById('modal-item-img').src = "https://minotar.net/helm/Diamond_Block/100.png";
+            document.getElementById('modal-item-img').src = "assets/img/tokens.png";
             document.getElementById('modal-item-name').innerText = "Токены";
             
             document.getElementById('modal-features-list').innerHTML = `
@@ -910,7 +911,7 @@
             btn.disabled = true;
             btn.innerText = "ЗАГРУЗКА...";
 
-            let edId = currentProduct.edId;
+            let edId = (currentType === 'tokens') ? TOKEN_ED_ID : currentProduct.edId;
 
             const payload = {
                 username: nick,
