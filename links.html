@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скачивание картинок и видео архивом</title>
+    <meta name="description" content="Скачивай картинки и видео с YouTube, TikTok и других сайтов архивом ZIP. До 20 ссылок за раз.">
+    <meta property="og:title" content="Скачивание картинок и видео архивом">
+    <meta property="og:description" content="Скачивай картинки и видео с YouTube, TikTok и других сайтов архивом ZIP. До 20 ссылок за раз.">
+    <meta property="og:type" content="website">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23FE2C55'/%3E%3Cpath d='M50 22v36m0 0L34 42m16 16 16-16' stroke='white' stroke-width='9' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M28 68v6a6 6 0 0 0 6 6h32a6 6 0 0 0 6-6v-6' stroke='white' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            background: #121212;
+            padding: 40px;
+            border-radius: 20px;
+            border-top: 4px solid #FE2C55;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-sizing: border-box;
+        }
+        h1 {
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .description {
+            background: #1a1a1a;
+            border-left: 3px solid #FE2C55;
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: #bbb;
+        }
+        .description strong {
+            color: #FE2C55;
+        }
+        p {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .mode-switch {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .mode-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #2a2a2a;
+            background: #1a1a1a;
+            color: #999;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn.active {
+            background: #FE2C55;
+            border-color: #FE2C55;
+            color: #fff;
+        }
+        textarea {
+            width: 100%;
+            height: 180px;
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            color: #fff;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+        textarea:focus {
+            border-color: #FE2C55;
+        }
+        button#downloadBtn {
+            background: #FE2C55;
+            color: #fff;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            width: 100%;
+            transition: background 0.2s;
+        }
+        button#downloadBtn:hover {
+            background: #d62448;
+        }
+        button#downloadBtn:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        .status {
+            margin-top: 20px;
+            font-size: 14px;
+            text-align: center;
+            color: #2ecc71;
+            min-height: 20px;
+        }
+        .error {
+            color: #FE2C55;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Скачать контент архивом</h1>
+
+    <div class="description">
+        <strong>О сайте:</strong> Это инструмент для пакетного скачивания медиафайлов.
+        Вставьте ссылки (каждую с новой строки), выберите тип контента, и сайт упакует всё в один ZIP-архив.
+        В режиме «Картинки» файлы переименовываются в <code>1.png</code>, <code>2.png</code> и т.д.
+        В режиме «Видео/Аудио» используется открытый API <strong>Cobalt</strong> для получения прямых ссылок с YouTube и других платформ.
+    </div>
+
+    <div class="mode-switch">
+        <button class="mode-btn active" id="modeImages" onclick="setMode('images')">🖼️ Картинки</button>
+        <button class="mode-btn" id="modeVideo" onclick="setMode('video')">🎬 Видео / Аудио</button>
+    </div>
+
+    <p id="hintText">Вставь ссылки на картинки, каждую с новой строки. Максимум 20 штук.</p>
+
+    <textarea id="urls" placeholder="Ссылка 1&#10;Ссылка 2&#10;Ссылка 3&#10;..."></textarea>
+
+    <button id="downloadBtn" onclick="downloadContent()">Скачать ZIP</button>
+    <div class="status" id="status"></div>
+</div>
+
+<script>
+    const COBALT_API = 'https://api.cobalt.tools/api/json';
+    const MAX_ITEMS = 20;
+
+    let currentMode = 'images';
+
+    const textarea = document.getElementById('urls');
+    const btn = document.getElementById('downloadBtn');
+    const status = document.getElementById('status');
+    const hintText = document.getElementById('hintText');
+    const modeImagesBtn = document.getElementById('modeImages');
+    const modeVideoBtn = document.getElementById('modeVideo');
+
+    function setMode(mode) {
+        currentMode = mode;
+        modeImagesBtn.classList.toggle('active', mode === 'images');
+        modeVideoBtn.classList.toggle('active', mode === 'video');
+
+        if (mode === 'images') {
+            hintText.textContent = 'Вставь ссылки на картинки, каждую с новой строки. Максимум 20 штук.';
+            textarea.placeholder = 'Ссылка 1\nСсылка 2\nСсылка 3\n...';
+        } else {
+            hintText.textContent = 'Вставь ссылки на видео (YouTube, TikTok, Vimeo и др.) или аудио, каждую с новой строки. Максимум 20 штук.';
+            textarea.placeholder = 'https://www.youtube.com/watch?v=...\nhttps://www.tiktok.com/@user/video/...\n...';
+        }
+        status.textContent = '';
+        status.className = 'status';
+    }
+
+    async function downloadContent() {
+        let urls = textarea.value.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+
+        if (urls.length === 0) {
+            status.textContent = 'Вставь хотя бы одну ссылку!';
+            status.className = 'status error';
+            return;
+        }
+
+        if (urls.length > MAX_ITEMS) {
+            urls = urls.slice(0, MAX_ITEMS);
+            alert(`Внимание: Максимум можно обработать ${MAX_ITEMS} ссылок. Будут взяты только первые ${MAX_ITEMS}.`);
+        }
+
+        btn.disabled = true;
+        status.textContent = 'Начинаю обработку...';
+        status.className = 'status';
+
+        const zip = new JSZip();
+        let successCount = 0;
+
+        for (let i = 0; i < urls.length; i++) {
+            const url = urls[i];
+            status.textContent = `Обработка ${i + 1} из ${urls.length}...`;
+
+            try {
+                if (currentMode === 'images') {
+                    await handleImage(url, i, zip);
+                } else {
+                    await handleVideo(url, i, zip);
+                }
+                successCount++;
+            } catch (error) {
+                console.error(`Ошибка на ссылке ${url}:`, error);
+                const ext = currentMode === 'images' ? 'png' : 'txt';
+                zip.file(`${i + 1}.${ext}`, `Ошибка загрузки: ${url}\n${error.message}`);
+            }
+        }
+
+        if (successCount === 0) {
+            status.textContent = 'Не удалось скачать ни одного файла. Проверьте ссылки и попробуйте снова.';
+            status.className = 'status error';
+            btn.disabled = false;
+            return;
+        }
+
+        status.textContent = 'Создание ZIP-архива...';
+
+        try {
+            const content = await zip.generateAsync({ type: 'blob' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(content);
+            link.download = currentMode === 'images' ? 'images.zip' : 'media.zip';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            status.textContent = `Готово! Архив скачан. Успешно: ${successCount} из ${urls.length}.`;
+            status.className = 'status';
+        } catch (error) {
+            status.textContent = 'Ошибка при создании ZIP-архива.';
+            status.className = 'status error';
+        }
+
+        btn.disabled = false;
+    }
+
+    async function handleImage(url, index, zip) {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const blob = await response.blob();
+        zip.file(`${index + 1}.png`, blob);
+    }
+
+    async function handleVideo(url, index, zip) {
+        const payload = {
+            url: url,
+            vCodec: 'h264',
+            vQuality: '720',
+            aFormat: 'mp3',
+            isAudioOnly: false,
+            filenamePattern: 'classic'
+        };
+
+        const response = await fetch(COBALT_API, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+            const errText = await response.text();
+            throw new Error(`Cobalt API: ${response.status} ${errText}`);
+        }
+
+        const data = await response.json();
+
+        if (data.status === 'error') {
+            throw new Error(`Cobalt: ${data.text || 'неизвестная ошибка'}`);
+        }
+
+        let downloadUrl = null;
+
+        if (data.status === 'redirect' || data.status === 'tunnel') {
+            downloadUrl = data.url;
+        } else if (data.status === 'picker' && data.picker && data.picker.length > 0) {
+            downloadUrl = data.picker[0].url;
+        } else if (data.url) {
+            downloadUrl = data.url;
+        }
+
+        if (!downloadUrl) {
+            throw new Error('Cobalt не вернул ссылку на файл');
+        }
+
+        const fileResponse = await fetch(downloadUrl);
+        if (!fileResponse.ok) throw new Error(`Не удалось скачать файл: HTTP ${fileResponse.status}`);
+
+        const blob = await fileResponse.blob();
+        let ext = 'mp4';
+        if (blob.type.includes('audio')) ext = 'mp3';
+        else if (blob.type.includes('webm')) ext = 'webm';
+        else if (blob.type.includes('mpeg')) ext = 'mp4';
+
+        zip.file(`${index + 1}.${ext}`, blob);
+    }
+</script>
+
+</body>
+</html>
