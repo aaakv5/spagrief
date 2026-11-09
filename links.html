@@ -158,7 +158,8 @@
 </div>
 
 <script>
-    const COBALT_API = 'https://cobalt-rimyrxuh.usw-1.sealos.app/';
+    // Публичная демо-версия API. Для стабильности лучше развернуть свою копию.
+    const API_BASE = 'https://btch-downloader-api-green.vercel.app';
     const MAX_ITEMS = 20;
 
     let currentMode = 'images';
@@ -261,49 +262,40 @@
     }
 
     async function handleVideo(url, index, zip) {
-        const payload = {
-            url: url,
-            videoCodec: 'h264',
-            videoQuality: '720',
-            audioFormat: 'mp3',
-            downloadMode: 'auto',
-            filenameStyle: 'classic'
-        };
+        // 1. Определяем платформу по URL
+        let platform = 'youtube'; // По умолчанию
+        if (url.includes('tiktok.com')) platform = 'tiktok';
+        else if (url.includes('instagram.com')) platform = 'instagram';
+        // ... можно добавить другие платформы
 
-        const response = await fetch(COBALT_API, {
+        // 2. Запрашиваем информацию о видео
+        const apiUrl = `${API_BASE}/api/download/${platform}`;
+        const response = await fetch(apiUrl, {
             method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(payload)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url: url })
         });
 
         if (!response.ok) {
             const errText = await response.text();
-            throw new Error(`Cobalt API: ${response.status} ${errText}`);
+            throw new Error(`API Error: ${response.status} ${errText}`);
         }
 
         const data = await response.json();
 
-        if (data.status === 'error') {
-            throw new Error(`Cobalt: ${data.text || 'неизвестная ошибка'}`);
-        }
-
         let downloadUrl = null;
-
-        if (data.status === 'redirect' || data.status === 'tunnel') {
-            downloadUrl = data.url;
-        } else if (data.status === 'picker' && data.picker && data.picker.length > 0) {
-            downloadUrl = data.picker[0].url;
+        if (data.success && data.data) {
+            downloadUrl = data.data.url || data.data.video || data.data.mp4;
         } else if (data.url) {
             downloadUrl = data.url;
         }
 
         if (!downloadUrl) {
-            throw new Error('Cobalt не вернул ссылку на файл');
+            console.error('Не удалось найти ссылку в ответе API:', data);
+            throw new Error('API не вернул ссылку на видео. Проверьте консоль для структуры ответа.');
         }
 
+        // 4. Скачиваем видеофайл
         const fileResponse = await fetch(downloadUrl);
         if (!fileResponse.ok) throw new Error(`Не удалось скачать файл: HTTP ${fileResponse.status}`);
 
@@ -311,7 +303,6 @@
         let ext = 'mp4';
         if (blob.type.includes('audio')) ext = 'mp3';
         else if (blob.type.includes('webm')) ext = 'webm';
-        else if (blob.type.includes('mpeg')) ext = 'mp4';
 
         zip.file(`${index + 1}.${ext}`, blob);
     }
