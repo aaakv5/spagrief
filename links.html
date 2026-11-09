@@ -158,7 +158,6 @@
 </div>
 
 <script>
-    // Публичная демо-версия API. Для стабильности лучше развернуть свою копию.
     const API_BASE = 'https://btch-downloader-api-green.vercel.app';
     const MAX_ITEMS = 20;
 
@@ -262,18 +261,17 @@
     }
 
     async function handleVideo(url, index, zip) {
-        // 1. Определяем платформу по URL
-        let platform = 'youtube'; // По умолчанию
+        let platform = 'youtube';
         if (url.includes('tiktok.com')) platform = 'tiktok';
         else if (url.includes('instagram.com')) platform = 'instagram';
-        // ... можно добавить другие платформы
 
-        // 2. Запрашиваем информацию о видео
-        const apiUrl = `${API_BASE}/api/download/${platform}`;
+        const apiUrl = `${API_BASE}/api/download/${platform}?url=${encodeURIComponent(url)}`;
+
         const response = await fetch(apiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url: url })
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
         });
 
         if (!response.ok) {
@@ -284,10 +282,15 @@
         const data = await response.json();
 
         let downloadUrl = null;
-        if (data.success && data.data) {
-            downloadUrl = data.data.url || data.data.video || data.data.mp4;
+
+        if (data.normalized && data.normalized.url) {
+            downloadUrl = data.normalized.url;
+        } else if (data.result && data.result.url) {
+            downloadUrl = data.result.url;
         } else if (data.url) {
             downloadUrl = data.url;
+        } else if (data.result && data.result.video) {
+            downloadUrl = data.result.video;
         }
 
         if (!downloadUrl) {
@@ -295,7 +298,6 @@
             throw new Error('API не вернул ссылку на видео. Проверьте консоль для структуры ответа.');
         }
 
-        // 4. Скачиваем видеофайл
         const fileResponse = await fetch(downloadUrl);
         if (!fileResponse.ok) throw new Error(`Не удалось скачать файл: HTTP ${fileResponse.status}`);
 
