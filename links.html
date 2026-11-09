@@ -32,97 +32,40 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             box-sizing: border-box;
         }
-        h1 {
-            margin-top: 0;
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
+        h1 { margin-top: 0; font-size: 24px; margin-bottom: 10px; }
         .description {
-            background: #1a1a1a;
-            border-left: 3px solid #FE2C55;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 13px;
-            line-height: 1.5;
-            color: #bbb;
+            background: #1a1a1a; border-left: 3px solid #FE2C55;
+            padding: 12px 16px; border-radius: 8px;
+            margin-bottom: 20px; font-size: 13px;
+            line-height: 1.5; color: #bbb;
         }
-        .description strong {
-            color: #FE2C55;
-        }
-        p {
-            color: #999;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .mode-switch {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
+        .description strong { color: #FE2C55; }
+        p { color: #999; font-size: 14px; margin-bottom: 20px; }
+        .mode-switch { display: flex; gap: 10px; margin-bottom: 20px; }
         .mode-btn {
-            flex: 1;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #2a2a2a;
-            background: #1a1a1a;
-            color: #999;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            flex: 1; padding: 12px; border-radius: 10px;
+            border: 1px solid #2a2a2a; background: #1a1a1a;
+            color: #999; font-size: 14px; font-weight: 600;
+            cursor: pointer; transition: all 0.2s;
         }
-        .mode-btn.active {
-            background: #FE2C55;
-            border-color: #FE2C55;
-            color: #fff;
-        }
+        .mode-btn.active { background: #FE2C55; border-color: #FE2C55; color: #fff; }
         textarea {
-            width: 100%;
-            height: 180px;
-            background: #1a1a1a;
-            border: 1px solid #2a2a2a;
-            color: #fff;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 14px;
-            resize: vertical;
-            outline: none;
-            margin-bottom: 20px;
-            box-sizing: border-box;
+            width: 100%; height: 180px; background: #1a1a1a;
+            border: 1px solid #2a2a2a; color: #fff; padding: 15px;
+            border-radius: 12px; font-size: 14px; resize: vertical;
+            outline: none; margin-bottom: 20px; box-sizing: border-box;
         }
-        textarea:focus {
-            border-color: #FE2C55;
-        }
+        textarea:focus { border-color: #FE2C55; }
         button#downloadBtn {
-            background: #FE2C55;
-            color: #fff;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            width: 100%;
+            background: #FE2C55; color: #fff; border: none;
+            padding: 15px 30px; border-radius: 12px; font-size: 16px;
+            font-weight: 800; cursor: pointer; width: 100%;
             transition: background 0.2s;
         }
-        button#downloadBtn:hover {
-            background: #d62448;
-        }
-        button#downloadBtn:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
-        .status {
-            margin-top: 20px;
-            font-size: 14px;
-            text-align: center;
-            color: #2ecc71;
-            min-height: 20px;
-        }
-        .error {
-            color: #FE2C55;
-        }
+        button#downloadBtn:hover { background: #d62448; }
+        button#downloadBtn:disabled { background: #555; cursor: not-allowed; }
+        .status { margin-top: 20px; font-size: 14px; text-align: center; color: #2ecc71; min-height: 20px; }
+        .error { color: #FE2C55; }
     </style>
 </head>
 <body>
@@ -158,7 +101,10 @@
 </div>
 
 <script>
-    const API_BASE = 'https://btch-downloader-api-green.vercel.app';
+    // Публичный инстанс Cobalt. При недоступности замените на другой с cobalt.directory
+    const COBALT_TARGET = 'https://cobalt.meowing.de/';
+    // Бесплатный CORS-прокси, который перенаправляет запрос к Cobalt
+    const CORS_PROXY = 'https://api.codetabs.com/v1/proxy?quest=';
     const MAX_ITEMS = 20;
 
     let currentMode = 'images';
@@ -261,52 +207,52 @@
     }
 
     async function handleVideo(url, index, zip) {
-        let platform = 'youtube';
-        if (url.includes('tiktok.com')) platform = 'tiktok';
-        else if (url.includes('instagram.com')) platform = 'instagram';
-    
-        const apiUrl = `${API_BASE}/api/download/${platform}?url=${encodeURIComponent(url)}`;
-    
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json' }
+        const payload = {
+            url: url,
+            videoCodec: 'h264',
+            videoQuality: '720',
+            downloadMode: 'tunnel', // Ключевой параметр: Cobalt сам проксирует файл
+            filenameStyle: 'classic'
+        };
+
+        // Отправляем запрос к Cobalt через CORS-прокси
+        const proxiedUrl = CORS_PROXY + encodeURIComponent(COBALT_TARGET);
+
+        const response = await fetch(proxiedUrl, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(payload)
         });
-    
+
         if (!response.ok) {
             const errText = await response.text();
-            throw new Error(`API Error: ${response.status} ${errText}`);
+            throw new Error(`Cobalt API (через прокси): ${response.status} ${errText}`);
         }
-    
+
         const data = await response.json();
-    
-        let downloadUrl = null;
-    
-        // Основной путь: структура normalized = { kind: "media", media: [{ url: "..." }] }
-        if (data.normalized && data.normalized.kind === 'media' && Array.isArray(data.normalized.media) && data.normalized.media.length > 0) {
-            downloadUrl = data.normalized.media[0].url;
+
+        if (data.status === 'error') {
+            throw new Error(`Cobalt: ${data.text || 'неизвестная ошибка'}`);
         }
-        // Резервные пути на случай, если normalized отсутствует или имеет другую структуру
-        else if (data.result && data.result.url) {
-            downloadUrl = data.result.url;
-        } else if (data.url) {
-            downloadUrl = data.url;
-        } else if (data.result && data.result.video) {
-            downloadUrl = data.result.video;
-        }
-    
+
+        let downloadUrl = data.url;
+
         if (!downloadUrl) {
-            console.error('Не удалось найти ссылку в ответе API:', data);
-            throw new Error('API не вернул ссылку на видео. Проверьте консоль для структуры ответа.');
+            throw new Error('Cobalt не вернул ссылку на файл.');
         }
-    
+
+        // Скачиваем файл уже с серверов Cobalt, а не с googlevideo.com
         const fileResponse = await fetch(downloadUrl);
         if (!fileResponse.ok) throw new Error(`Не удалось скачать файл: HTTP ${fileResponse.status}`);
-    
+
         const blob = await fileResponse.blob();
         let ext = 'mp4';
         if (blob.type.includes('audio')) ext = 'mp3';
         else if (blob.type.includes('webm')) ext = 'webm';
-    
+
         zip.file(`${index + 1}.${ext}`, blob);
     }
 </script>
