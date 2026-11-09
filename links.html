@@ -264,48 +264,49 @@
         let platform = 'youtube';
         if (url.includes('tiktok.com')) platform = 'tiktok';
         else if (url.includes('instagram.com')) platform = 'instagram';
-
+    
         const apiUrl = `${API_BASE}/api/download/${platform}?url=${encodeURIComponent(url)}`;
-
+    
         const response = await fetch(apiUrl, {
             method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
+            headers: { 'Accept': 'application/json' }
         });
-
+    
         if (!response.ok) {
             const errText = await response.text();
             throw new Error(`API Error: ${response.status} ${errText}`);
         }
-
+    
         const data = await response.json();
-
+    
         let downloadUrl = null;
-
-        if (data.normalized && data.normalized.url) {
-            downloadUrl = data.normalized.url;
-        } else if (data.result && data.result.url) {
+    
+        // Основной путь: структура normalized = { kind: "media", media: [{ url: "..." }] }
+        if (data.normalized && data.normalized.kind === 'media' && Array.isArray(data.normalized.media) && data.normalized.media.length > 0) {
+            downloadUrl = data.normalized.media[0].url;
+        }
+        // Резервные пути на случай, если normalized отсутствует или имеет другую структуру
+        else if (data.result && data.result.url) {
             downloadUrl = data.result.url;
         } else if (data.url) {
             downloadUrl = data.url;
         } else if (data.result && data.result.video) {
             downloadUrl = data.result.video;
         }
-
+    
         if (!downloadUrl) {
             console.error('Не удалось найти ссылку в ответе API:', data);
             throw new Error('API не вернул ссылку на видео. Проверьте консоль для структуры ответа.');
         }
-
+    
         const fileResponse = await fetch(downloadUrl);
         if (!fileResponse.ok) throw new Error(`Не удалось скачать файл: HTTP ${fileResponse.status}`);
-
+    
         const blob = await fileResponse.blob();
         let ext = 'mp4';
         if (blob.type.includes('audio')) ext = 'mp3';
         else if (blob.type.includes('webm')) ext = 'webm';
-
+    
         zip.file(`${index + 1}.${ext}`, blob);
     }
 </script>
