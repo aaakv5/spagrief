@@ -286,11 +286,13 @@
         .btn-apply { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0 15px; border-radius: var(--radius-sm); font-weight: 700; transition: 0.2s; }
         .btn-apply:hover { background: rgba(254,44,85,0.1); }
 
-        .total-block { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 15px 20px; border-radius: var(--radius-md); margin-top: auto; margin-bottom: 20px; }
+        /* Уменьшили размер блока итоговой цены */
+        .total-block { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-md); margin-top: auto; margin-bottom: 20px; }
         .total-label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .total-price { font-size: 28px; font-weight: 900; margin-top: 4px; }
+        .total-price { font-size: 22px; font-weight: 900; margin-top: 2px; } /* Было 28px */
         
-        .btn-submit { background: var(--accent); color: #fff; padding: 18px; border-radius: var(--radius-md); font-size: 16px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; width: 100%; }
+        /* Уменьшили кнопку Продолжить */
+        .btn-submit { background: var(--accent); color: #fff; padding: 12px 20px; border-radius: var(--radius-md); font-size: 14px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; width: 100%; } /* Было padding 18px и font-size 16px */
         .btn-submit:hover { background: var(--accent-hover); }
         .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
 
@@ -790,8 +792,8 @@
 
                 <!-- Блок количества (показывается только для сундуков) -->
                 <div id="quantity-block" style="display: none;">
-                    <label class="input-label">КОЛИЧЕСТВО</label>
-                    <input type="number" class="input-field" id="input-quantity" value="1" min="1">
+                    <label class="input-label">КОЛИЧЕСТВО (МАКС. 500)</label>
+                    <input type="number" class="input-field" id="input-quantity" value="1" min="1" max="500">
                 </div>
 
                 <div class="total-block">
@@ -1003,6 +1005,7 @@
         document.getElementById('input-quantity').addEventListener('input', function() {
             let val = parseInt(this.value) || 1;
             if (val < 1) val = 1;
+            if (val > 500) val = 500; // Ограничение в 500 штук
             this.value = val;
             updateModalPrice();
         });
@@ -1054,6 +1057,7 @@
                 quantity = tokenAmountRub;
             } else if (currentType === 'chests') {
                 quantity = parseInt(document.getElementById('input-quantity').value) || 1;
+                if (quantity > 500) quantity = 500; // Жесткая проверка перед отправкой
             }
 
             const payload = {
