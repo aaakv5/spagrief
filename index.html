@@ -591,7 +591,7 @@
                         <div class="accordion-content">
                             <span>6.1</span> Попытки махинаций оплатами, или ввод Администрации в заблуждение наказываются баном без возврата средств.<br>
                             <span>6.2</span> Предоставьте чек оплаты, если хотите написать Администрации о пропаже, непоявлении доната после покупки. Без данного подтверждения администрация вправе отказать Вам в предоставлении купленной услуги.<br>
-                            <span>6.3</span> Администрация не обязана предоставлять доказательства нарушений донатера у которого сняли привилегию за нарушение выше указанных правил.
+                            <span>6.3</span> Администрация не обязана предоставлять доказательств нарушений донатера у которого сняли привилегию за нарушение выше указанных правил.
                         </div>
                     </div>
 
@@ -757,6 +757,7 @@
         </div>
     </footer>
 
+    <!-- МОДАЛЬНОЕ ОКНО ОПЛАТЫ -->
     <div class="modal-overlay" id="payment-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
@@ -785,6 +786,12 @@
                 <div class="promo-group">
                     <input type="text" class="input-field" id="input-promo" placeholder="Введите промокод">
                     <button class="btn-apply">Применить</button>
+                </div>
+
+                <!-- Блок количества (показывается только для сундуков) -->
+                <div id="quantity-block" style="display: none;">
+                    <label class="input-label">КОЛИЧЕСТВО</label>
+                    <input type="number" class="input-field" id="input-quantity" value="1" min="1">
                 </div>
 
                 <div class="total-block">
@@ -869,6 +876,7 @@
         let currentPrice = 0;
         let currentType = 'privileges';
         let tokenAmountRub = 100;
+        let currentQuantity = 1;
 
         function renderGrid(category) {
             const grid = document.getElementById('product-grid');
@@ -939,6 +947,23 @@
             updateTokenCalc(val);
         }
 
+        function updateModalPrice() {
+            if (!currentProduct) return;
+            
+            if (currentType === 'tokens') {
+                currentPrice = tokenAmountRub;
+            } else if (currentType === 'chests') {
+                const qty = parseInt(document.getElementById('input-quantity').value) || 1;
+                currentQuantity = qty;
+                currentPrice = currentProduct.price * qty;
+            } else {
+                currentPrice = currentProduct.price;
+            }
+            
+            document.getElementById('modal-item-price').innerText = (currentType === 'chests' ? (currentProduct.price + ' ₽ / шт.') : (currentPrice + ' ₽'));
+            document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
+        }
+
         function openProductModal(id, category) {
             let product;
             if (category === 'privileges') product = privileges.find(p => p.id === id);
@@ -949,22 +974,43 @@
 
             currentProduct = product;
             currentType = category;
-            currentPrice = product.price;
+            currentQuantity = 1;
+            
+            // Показываем/скрываем блок количества
+            const quantityBlock = document.getElementById('quantity-block');
+            if (category === 'chests') {
+                quantityBlock.style.display = 'block';
+                document.getElementById('input-quantity').value = 1;
+            } else {
+                quantityBlock.style.display = 'none';
+            }
 
             document.getElementById('modal-item-img').src = product.img;
             document.getElementById('modal-item-name').innerText = product.name;
             document.getElementById('modal-features-list').innerHTML = product.features.map((f, i) => `<li><span class="num">0${i+1}</span> <span>${f}</span></li>`).join('');
             
-            document.getElementById('modal-item-price').innerText = currentPrice + ' РУБ';
-            document.getElementById('modal-total-price').innerText = currentPrice + ' РУБ';
+            // Устанавливаем начальную цену
+            currentPrice = product.price;
+            document.getElementById('modal-item-price').innerText = currentPrice + ' ₽';
+            document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
 
             document.getElementById('input-nick').value = "";
             document.getElementById('input-promo').value = "";
             document.getElementById('payment-modal').style.display = 'flex';
         }
 
+        // Обработчик изменения количества
+        document.getElementById('input-quantity').addEventListener('input', function() {
+            let val = parseInt(this.value) || 1;
+            if (val < 1) val = 1;
+            this.value = val;
+            updateModalPrice();
+        });
+
         function openTokenModal() {
             currentType = 'tokens';
+            currentQuantity = 1;
+            document.getElementById('quantity-block').style.display = 'none';
             
             document.getElementById('modal-item-img').src = "assets/img/tokens.png";
             document.getElementById('modal-item-name').innerText = "Токены";
@@ -975,8 +1021,8 @@
             `;
             
             currentPrice = tokenAmountRub;
-            document.getElementById('modal-item-price').innerText = currentPrice + ' РУБ';
-            document.getElementById('modal-total-price').innerText = currentPrice + ' РУБ';
+            document.getElementById('modal-item-price').innerText = currentPrice + ' ₽';
+            document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
 
             document.getElementById('input-nick').value = "";
             document.getElementById('input-promo').value = "";
@@ -1002,12 +1048,19 @@
             btn.innerText = "ЗАГРУЗКА...";
 
             let edId = (currentType === 'tokens') ? TOKEN_ED_ID : currentProduct.edId;
+            let quantity = 1;
+            
+            if (currentType === 'tokens') {
+                quantity = tokenAmountRub;
+            } else if (currentType === 'chests') {
+                quantity = parseInt(document.getElementById('input-quantity').value) || 1;
+            }
 
             const payload = {
                 username: nick,
                 server_id: SERVER_ID,
                 email: `${nick}@spagrief.fun`,
-                products: [{ id: edId, quantity: currentType === 'tokens' ? tokenAmountRub : 1 }]
+                products: [{ id: edId, quantity: quantity }]
             };
 
             if (promo) payload.promocode = promo;
