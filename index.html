@@ -286,12 +286,10 @@
         .btn-apply { background: transparent; border: 1px solid var(--accent); color: var(--accent); padding: 0 15px; border-radius: var(--radius-sm); font-weight: 700; transition: 0.2s; }
         .btn-apply:hover { background: rgba(254,44,85,0.1); }
 
-        /* Уменьшили размер блока итоговой цены */
         .total-block { display: flex; align-items: center; justify-content: space-between; background: var(--bg-card); padding: 12px 16px; border-radius: var(--radius-md); margin-top: auto; margin-bottom: 20px; }
         .total-label { font-size: 12px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-        .total-price { font-size: 22px; font-weight: 900; margin-top: 2px; } /* Было 28px */
+        .total-price { font-size: 22px; font-weight: 900; margin-top: 2px; }
         
-        /* Уменьшили кнопку Продолжить */
         .btn-submit { background: var(--accent); color: #fff; padding: 12px 20px; border-radius: var(--radius-md); font-size: 14px; font-weight: 800; display: flex; justify-content: space-between; align-items: center; transition: 0.2s; width: 100%; } /* Было padding 18px и font-size 16px */
         .btn-submit:hover { background: var(--accent-hover); }
         .btn-submit:disabled { background: var(--text-muted); cursor: not-allowed; }
@@ -345,19 +343,19 @@
                 </div>
             </div>
             <nav class="nav">
-                <a href="#" class="active" data-page="shop" onclick="switchPage('shop')">
+                <a href="" class="active" data-page="shop" onclick="switchPage('shop')">
                     <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg> ГЛАВНАЯ
                 </a>
-                <a href="#" data-page="rules" onclick="switchPage('rules')">
+                <a href="" data-page="rules" onclick="switchPage('rules')">
                     <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> ПРАВИЛА
                 </a>
-                <a href="#" data-page="banlist" onclick="switchPage('banlist')">
+                <a href="" data-page="banlist" onclick="switchPage('banlist')">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg> БАН-ЛИСТ
                 </a>
-                <a href="#" data-page="contacts" onclick="switchPage('contacts')">
+                <a href="" data-page="contacts" onclick="switchPage('contacts')">
                     <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"/></svg> КОНТАКТЫ
                 </a>
-                <a href="#" data-page="join" onclick="switchPage('join')">
+                <a href="" data-page="join" onclick="switchPage('join')">
                     <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> КАК ЗАЙТИ?
                 </a>
             </nav>
@@ -465,7 +463,6 @@
             </div>
         </section>
 
-        <!-- RULES PAGE -->
         <section id="page-rules" class="page">
             <div class="rules-layout">
                 <div class="rules-side">
@@ -614,7 +611,7 @@
                 </div>
                 <div class="search-wrap">
                     <svg class="search-icon" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-                    <input type="text" class="search-input" placeholder="Ник игрока или модератора...">
+                    <input type="text" class="search-input" placeholder="Введите ник">
                 </div>
             </div>
             <div class="table-wrap">
@@ -644,7 +641,7 @@
                     <h3>Обратиться в тех. поддержку</h3>
                     <p>Возникли проблемы? Напишите в бот — разберёмся и поможем</p>
                     <div class="contact-icon">🛠️</div>
-                    <a href="https://t.me/SpaGriefHelpBot" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
+                    <a href="https://t.me/SpaGriefHelp" target="_blank" class="contact-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg></a>
                 </div>
                 <div class="contact-card">
                     <h3>Вступай в наш Discord сервер</h3>
@@ -684,7 +681,7 @@
                     </div>
                 </div>
                 <div class="step-img">
-                    Скриншот добавления сервера
+                    Скриншот
                 </div>
             </div>
 
@@ -694,7 +691,7 @@
                     <p>Выбери SpaGrief в списке серверов и нажми «Подключиться».</p>
                 </div>
                 <div class="step-img">
-                    Скриншот подключения
+                    Скриншот
                 </div>
             </div>
         </section>
@@ -720,7 +717,7 @@
                 <div class="footer-col">
                     <h4>Поддержка</h4>
                     <ul>
-                        <li><a href="https://t.me/SpaGriefHelpBot" target="_blank">Telegram-поддержка</a></li>
+                        <li><a href="https://t.me/SpaGriefHelp" target="_blank">Telegram-поддержка</a></li>
                     </ul>
                 </div>
                 <div class="footer-col">
@@ -738,7 +735,6 @@
         </div>
     </footer>
 
-    <!-- МОДАЛЬНОЕ ОКНО ОПЛАТЫ -->
     <div class="modal-overlay" id="payment-modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
@@ -769,7 +765,6 @@
                     <button class="btn-apply">Применить</button>
                 </div>
 
-                <!-- Блок количества (показывается только для сундуков) -->
                 <div id="quantity-block" style="display: none;">
                     <label class="input-label">КОЛИЧЕСТВО (МАКС. 500)</label>
                     <input type="number" class="input-field" id="input-quantity" value="1" min="1" max="500">
@@ -957,7 +952,6 @@
             currentType = category;
             currentQuantity = 1;
             
-            // Показываем/скрываем блок количества
             const quantityBlock = document.getElementById('quantity-block');
             if (category === 'chests') {
                 quantityBlock.style.display = 'block';
@@ -970,7 +964,6 @@
             document.getElementById('modal-item-name').innerText = product.name;
             document.getElementById('modal-features-list').innerHTML = product.features.map((f, i) => `<li><span class="num">0${i+1}</span> <span>${f}</span></li>`).join('');
             
-            // Устанавливаем начальную цену
             currentPrice = product.price;
             document.getElementById('modal-item-price').innerText = currentPrice + ' ₽';
             document.getElementById('modal-total-price').innerText = currentPrice + ' ₽';
@@ -979,12 +972,11 @@
             document.getElementById('input-promo').value = "";
             document.getElementById('payment-modal').style.display = 'flex';
         }
-
-        // Обработчик изменения количества
+        
         document.getElementById('input-quantity').addEventListener('input', function() {
             let val = parseInt(this.value) || 1;
             if (val < 1) val = 1;
-            if (val > 500) val = 500; // Ограничение в 500 штук
+            if (val > 500) val = 500;
             this.value = val;
             updateModalPrice();
         });
@@ -1036,7 +1028,7 @@
                 quantity = tokenAmountRub;
             } else if (currentType === 'chests') {
                 quantity = parseInt(document.getElementById('input-quantity').value) || 1;
-                if (quantity > 500) quantity = 500; // Жесткая проверка перед отправкой
+                if (quantity > 500) quantity = 500;
             }
 
             const payload = {
