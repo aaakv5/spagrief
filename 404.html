@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Перенаправление…</title>
+    <script>
+        (function() {
+            const host = location.hostname;
+            const path = location.pathname;
+
+            if (host.endsWith('.github.io')) {
+                const parts = path.split('/').filter(Boolean);
+                const repo = parts[0] || '';
+                const rest = '/' + parts.slice(1).join('/');
+                sessionStorage.setItem('spa-redirect', rest || '/');
+                location.replace('/' + repo + '/');
+            } else {
+                sessionStorage.setItem('spa-redirect', path);
+                location.replace('/');
+            }
+        })();
+    </script>
+</head>
+<body></body>
+</html>
