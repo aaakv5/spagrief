@@ -629,27 +629,6 @@
                         </tr>
                     </thead>
                     <tbody id="banlist-body">
-                        <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/MrTyOne/36.png" class="player-avatar"> MrTyOne</div></td>
-                            <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
-                            <td>SpaAC</td>
-                            <td>14 минут назад</td>
-                            <td><span class="status-badge status-active">ещё 13 д</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/flow1488/36.png" class="player-avatar"> flow1488</div></td>
-                            <td>[SpaAC-M] Пункт 4.2 (Использование запрещённого ПО)</td>
-                            <td>SpaAC</td>
-                            <td>26 минут назад</td>
-                            <td><span class="status-badge status-active">ещё 13 д</span></td>
-                        </tr>
-                        <tr>
-                            <td><div class="player-cell"><img src="https://minotar.net/helm/Rix_2006/36.png" class="player-avatar"> Rix_2006</div></td>
-                            <td>Пункт 4.2 (Использование запрещённого ПО)</td>
-                            <td>SpaAC</td>
-                            <td>58 минут назад</td>
-                            <td><span class="status-badge status-expired">Истек</span></td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -1130,6 +1109,77 @@
 
         renderGrid('privileges');
         updateTokenCalc(100);
+
+        const BANLIST_API = "https://spa-banlist-api.aquadark5647.workers.dev";
+        
+        async function loadBanlist(type = "bans") {
+          const tbody = document.getElementById("banlist-body");
+          tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#999;">Загрузка...</td></tr>';
+        
+          try {
+            const res = await fetch(`${BANLIST_API}?type=${type}`);
+            const json = await res.json();
+            
+            tbody.innerHTML = json.data.map((item) => {
+              const isActive = item.active && (item.until === null || new Date(item.until) > new Date());
+              const statusText = isActive 
+                ? (item.until ? `ещё ${formatTimeLeft(item.until)}` : "навсегда") 
+                : "Истек";
+              const statusClass = isActive ? "status-active" : "status-expired";
+              const timeAgo = formatTimeAgo(item.time);
+              
+              return `
+                <tr>
+                  <td>
+                    <div class="player-cell">
+                      <img src="https://minotar.net/helm/${item.uuid}/36.png" class="player-avatar" onerror="this.src='https://minotar.net/helm/Steve/36.png'">
+                      ${item.uuid ? item.uuid.slice(0, 8) + '…' : '—'}
+                    </div>
+                  </td>
+                  <td>${item.reason || '—'}</td>
+                  <td>${item.admin || '—'}</td>
+                  <td>${timeAgo}</td>
+                  <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                </tr>
+              `;
+            }).join('');
+          } catch (err) {
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#FE2C55;">Не удалось загрузить данные</td></tr>';
+            console.error(err);
+          }
+        }
+        
+        function formatTimeLeft(untilIso) {
+          const diff = new Date(untilIso) - new Date();
+          if (diff <= 0) return "Истек";
+          const days = Math.floor(diff / 86400000);
+          const hours = Math.floor((diff % 86400000) / 3600000);
+          if (days > 0) return `${days} д`;
+          if (hours > 0) return `${hours} ч`;
+          return "< 1 ч";
+        }
+        
+        function formatTimeAgo(isoString) {
+          const diff = Date.now() - new Date(isoString).getTime();
+          const minutes = Math.floor(diff / 60000);
+          if (minutes < 60) return `${minutes} мин назад`;
+          const hours = Math.floor(minutes / 60);
+          if (hours < 24) return `${hours} ч назад`;
+          const days = Math.floor(hours / 24);
+          return `${days} д назад`;
+        }
+        
+        document.querySelectorAll(".ban-tab").forEach((tab) => {
+          tab.addEventListener("click", function () {
+            document.querySelectorAll(".ban-tab").forEach((t) => t.classList.remove("active"));
+            this.classList.add("active");
+            const label = this.textContent.trim().toLowerCase();
+            const typeMap = { "баны": "bans", "муты": "mutes", "предупреждения": "warnings" };
+            loadBanlist(typeMap[label] || "bans");
+          });
+        });
+        
+        loadBanlist("bans");
     </script>
 </body>
 </html>
