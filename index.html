@@ -768,36 +768,23 @@
     </div>
 
     <script>
-    /* ============================================================
-       1. БАЗОВЫЙ ПУТЬ (поддержка GitHub Pages project site)
-       ============================================================ */
     function detectBasePath() {
         const host = window.location.hostname;
         const path = window.location.pathname;
         const KNOWN = ['', 'bans', 'rules', 'contacts', 'join', 'shop', 'banlist', 'index.html'];
-
-        // Кастомный домен — base = ''
         if (!host.endsWith('.github.io')) return '';
-
         const parts = path.split('/').filter(Boolean);
         if (parts.length === 0) return '';
-        // username.github.io/repo — repo это base
         if (!KNOWN.includes(parts[0])) return '/' + parts[0];
         return '';
     }
     const BASE_PATH = detectBasePath();
 
-    /* ============================================================
-       2. ПРОЧИЕ КОНСТАНТЫ
-       ============================================================ */
     const PROXY_URL = "https://spagrief-easydonate.aquadark5647.workers.dev";
     const SERVER_ID = 143248;
     const TOKEN_ED_ID = 1128308;
     const BANLIST_API = "https://spa-banlist-api.aquadark5647.workers.dev";
 
-    /* ============================================================
-       3. ПОДГРУЗКА ОНЛАЙНА
-       ============================================================ */
     async function fetchOnline() {
         try {
             const res = await fetch('https://api.mcsrvstat.us/3/mc.spagrief.fun');
@@ -810,9 +797,6 @@
     setInterval(fetchOnline, 60000);
     fetchOnline();
 
-    /* ============================================================
-       4. ТОВАРЫ
-       ============================================================ */
     const privileges = [
         { id: 1, name: "Барон", img: "assets/img/skins/1.png", price: 49, edId: 1128044, badge: "", hot: false, features: ["⚕ Префикс в чате и табе: [Барон] ВашНик<br>› /kit Барон ⇨ Получить набор Барона<br>› /salary ⇨ Получить зарплату<br>› /crawl ⇨ Сменить позу: красться<br><br>Прочее:<br>Доступно Точек домов: 2<br>Регионов: 3 блоков<br>Слотов на Аукционе: 6<br>Задержка телепорта: 7 сек"] },
         { id: 2, name: "Страж", img: "assets/img/skins/2.png", price: 89, edId: 1128046, badge: "", hot: false, features: ["⚕ Префикс в чате и табе: [Страж] ВашНик<br>› /kit Страж ⇨ Получить набор Стража<br>› /suicide ⇨ Покончить жизнь самоубийством<br>› /dchat ⇨ Воспользоваться Донат-Чатом<br><br>Прочее:<br>Доступно Точек домов: 2<br>Регионов: 3 блоков<br>Слотов на Аукционе: 7<br>Задержка телепорта: 6 сек<br>✔ Возможности привилегии ниже"] },
@@ -842,9 +826,6 @@
         { id: 302, name: "Разбан", img: "assets/img/unban.png", price: 99, edId: 1128391, features: ["Самый обыкновенный разбан<br>Не разбанит вас, если:<br>1. Вы были много раз в бане<br>2. Вы сильно вредите серверу<br>3. Занимаетесь взломами<br>и так далее.."] }
     ];
 
-    /* ============================================================
-       5. СОСТОЯНИЕ
-       ============================================================ */
     let currentProduct = null;
     let currentBanType = 'bans';
     let currentPrice = 0;
@@ -852,9 +833,6 @@
     let tokenAmountRub = 100;
     let currentQuantity = 1;
 
-    /* ============================================================
-       6. РЕНДЕР МАГАЗИНА
-       ============================================================ */
     function renderGrid(category) {
         const grid = document.getElementById('product-grid');
         let data = [];
@@ -1041,9 +1019,6 @@
         }
     }
 
-    /* ============================================================
-       7. РОУТИНГ
-       ============================================================ */
     const PAGE_ROUTES = {
         '/':         'shop',
         '/shop':     'shop',
@@ -1101,9 +1076,6 @@
         switchPage(getPageFromPath(), false);
     });
 
-    /* ============================================================
-       8. АККОРДЕОН, КОПИРОВАНИЕ IP
-       ============================================================ */
     function toggleAccordion(btn) {
         const item = btn.parentElement;
         const content = btn.nextElementSibling;
@@ -1129,9 +1101,6 @@
         });
     }
 
-    /* ============================================================
-       9. БАН-ЛИСТ
-       ============================================================ */
     async function loadBanlist(type = "bans") {
         const tbody = document.getElementById("banlist-body");
         tbody.innerHTML = '<tr><td colspan="5" style="text-align:center; color:#999;">Загрузка...</td></tr>';
@@ -1178,7 +1147,6 @@
         }
     }
 
-    // Защита от маркеров «навсегда» в LiteBans (until = 0, -1, null, дата до 2000 г.)
     function normalizeUntil(untilStr) {
         if (!untilStr || untilStr === null) return null;
         const d = new Date(untilStr);
@@ -1222,10 +1190,6 @@
         });
     });
 
-    /* ============================================================
-       10. ИНИЦИАЛИЗАЦИЯ
-       ============================================================ */
-    // 10.1. Обновляем href всех ссылок с data-page под BASE_PATH
     document.querySelectorAll('a[data-page]').forEach(a => {
         const pageId = a.getAttribute('data-page');
         const route = ROUTE_TO_PATH[pageId];
@@ -1234,7 +1198,6 @@
         }
     });
 
-    // 10.2. GitHub Pages fallback: если пришли через 404.html — восстановим путь
     const savedRedirect = sessionStorage.getItem('spa-redirect');
     if (savedRedirect) {
         sessionStorage.removeItem('spa-redirect');
@@ -1244,7 +1207,6 @@
         }
     }
 
-    // 10.3. Запускаем нужную страницу
     renderGrid('privileges');
     updateTokenCalc(100);
     switchPage(getPageFromPath(), false);
